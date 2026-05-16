@@ -7,11 +7,13 @@ import {
   Database,
   History,
   MessageCircle,
+  PlayCircle,
   Send,
   SearchCheck,
   ShieldAlert,
   ShieldCheck,
-  Trophy
+  Trophy,
+  Users
 } from "lucide-react";
 import { EmptyState } from "@/components/EmptyState";
 import { RiskBadge } from "@/components/RiskBadge";
@@ -50,10 +52,28 @@ const dashboardActions = [
     icon: CheckSquare
   },
   {
+    title: "Scenario simulator",
+    description: "Practice identifying safe, suspicious and dangerous messages.",
+    href: "/scenario-simulator",
+    icon: PlayCircle
+  },
+  {
+    title: "Trusted contacts",
+    description: "Store local trusted contacts for safer family support workflows.",
+    href: "/trusted-contacts",
+    icon: Users
+  },
+  {
     title: "Family help message",
     description: "Generate a message asking family to help verify a suspicious situation.",
     href: "/family-help",
     icon: MessageCircle
+  },
+  {
+    title: "Start Interactive Demo",
+    description: "Follow a guided recruiter-friendly walkthrough of the product.",
+    href: "/demo",
+    icon: PlayCircle
   },
   {
     title: "Report a scam",

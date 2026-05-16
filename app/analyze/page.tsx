@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { RotateCcw, SearchCheck, ShieldCheck } from "lucide-react";
+import { Eraser, RotateCcw, SearchCheck, ShieldCheck } from "lucide-react";
 import { AnalysisResult } from "@/components/AnalysisResult";
 import { Disclaimer } from "@/components/Disclaimer";
 import { ExampleMessageButton } from "@/components/ExampleMessageButton";
 import { exampleMessages, type ExampleMessage } from "@/data/examples";
 import { useAnalysisHistory } from "@/hooks/useAnalysisHistory";
-import { analyzeMessage, messageTypes } from "@/lib/scamAnalyzer";
+import { analyzeMessage, MAX_ANALYSIS_INPUT_LENGTH, messageTypes } from "@/lib/scamAnalyzer";
 import type { AnalysisResult as AnalysisResultType, MessageType } from "@/lib/types";
 
 export default function AnalyzePage() {
@@ -16,6 +16,18 @@ export default function AnalyzePage() {
   const [text, setText] = useState("");
   const [result, setResult] = useState<AnalysisResultType | null>(null);
   const { addAnalysis } = useAnalysisHistory();
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const example = searchParams.get("example");
+    const type = searchParams.get("type") as MessageType | null;
+
+    if (example) {
+      const safeType = type && messageTypes.includes(type) ? type : "SMS";
+      setMessageType(safeType);
+      setText(example.slice(0, MAX_ANALYSIS_INPUT_LENGTH));
+    }
+  }, []);
 
   const runAnalysis = (type: MessageType, content: string) => {
     const analysis = analyzeMessage(type, content);
@@ -32,7 +44,7 @@ export default function AnalyzePage() {
 
   const handleSample = (example: ExampleMessage) => {
     setMessageType(example.type);
-    setText(example.text);
+    setText(example.text.slice(0, MAX_ANALYSIS_INPUT_LENGTH));
     runAnalysis(example.type, example.text);
   };
 
@@ -60,7 +72,7 @@ export default function AnalyzePage() {
               <p className="font-black">Privacy-first analysis</p>
             </div>
             <p className="mt-3 text-sm leading-6 text-cyan-50">
-              Analysis runs in the browser. Avoid entering real passwords, card numbers or PESEL.
+              Analysis runs in the browser. Avoid entering real passwords, full card numbers, PESEL or banking credentials.
             </p>
           </div>
         </div>
@@ -94,13 +106,15 @@ export default function AnalyzePage() {
               <textarea
                 id="message-text"
                 value={text}
-                onChange={(event) => setText(event.target.value)}
+                maxLength={MAX_ANALYSIS_INPUT_LENGTH}
+                onChange={(event) => setText(event.target.value.slice(0, MAX_ANALYSIS_INPUT_LENGTH))}
                 rows={12}
                 placeholder="Paste a suspicious SMS, email, link or describe a phone call..."
                 className="mt-2 w-full resize-y rounded-3xl border border-slate-200 bg-white px-4 py-4 text-ink shadow-sm focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
               />
               <p className="mt-2 text-sm leading-6 text-slate-500">
-                Tip: do not paste real passwords, full card numbers or PESEL. A short preview is enough.
+                Tip: do not paste real passwords, full card numbers, PESEL numbers or banking credentials. {text.length}/
+                {MAX_ANALYSIS_INPUT_LENGTH} characters.
               </p>
             </div>
 
@@ -122,6 +136,14 @@ export default function AnalyzePage() {
                 Reset
               </button>
             </div>
+            <button
+              type="button"
+              onClick={() => setText("")}
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3 font-bold text-ink transition hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-teal-200"
+            >
+              <Eraser aria-hidden="true" size={20} />
+              Clear input
+            </button>
           </div>
 
           <div className="mt-7 border-t border-slate-100 pt-5">

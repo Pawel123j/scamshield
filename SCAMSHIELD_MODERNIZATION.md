@@ -15,6 +15,8 @@ This modernization pass focused on turning the first complete build into a more 
 - Modernized landing page copy and product positioning.
 - Added GitHub Actions CI.
 - Added screenshot placeholders.
+- Added next-level upgrade features: PWA support, Docker setup, Dark Mode, scenario simulator, trusted contacts and demo route.
+- Added architecture, security, smoke test and screenshot documentation.
 
 ## Quality Notes
 

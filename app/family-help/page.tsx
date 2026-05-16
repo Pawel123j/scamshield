@@ -3,6 +3,9 @@
 import { useMemo, useState } from "react";
 import { MessageCircle, Sparkles } from "lucide-react";
 import { CopyButton } from "@/components/CopyButton";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { storageKeys } from "@/lib/storage";
+import type { TrustedContact } from "@/lib/types";
 
 export default function FamilyHelpPage() {
   const [whatHappened, setWhatHappened] = useState("");
@@ -10,10 +13,14 @@ export default function FamilyHelpPage() {
   const [suspiciousText, setSuspiciousText] = useState("");
   const [urgency, setUrgency] = useState("Nie wiem");
   const [contactMethod, setContactMethod] = useState("Telefon");
+  const [contacts] = useLocalStorage<TrustedContact[]>(storageKeys.trustedContacts, []);
+  const [selectedContactId, setSelectedContactId] = useState("");
+  const selectedContact = contacts.find((contact) => contact.id === selectedContactId);
 
   const generatedMessage = useMemo(() => {
     return [
       "Cześć, dostałem/am podejrzaną wiadomość lub telefon. Możesz mi pomóc sprawdzić, czy to oszustwo?",
+      selectedContact ? `Piszę do Ciebie, bo jesteś moją zaufaną osobą (${selectedContact.relation || "kontakt zaufany"}).` : "",
       "",
       "Co się stało:",
       whatHappened.trim() || "Nie jestem pewien/pewna, jak to opisać.",
@@ -22,12 +29,12 @@ export default function FamilyHelpPage() {
       description.trim() || "Potrzebuję spokojnej weryfikacji.",
       "",
       `Pilność według nadawcy: ${urgency}`,
-      `Najwygodniejszy kontakt: ${contactMethod}`,
+      `Najwygodniejszy kontakt: ${selectedContact?.preferredContactMethod ?? contactMethod}`,
       "",
       suspiciousText.trim() ? `Treść wiadomości:\n${suspiciousText.trim()}\n` : "Treść wiadomości:\nBrak wklejonej treści.\n",
       "Nie klikam żadnych linków, nie podaję kodów ani danych i czekam na Twoją pomoc."
     ].join("\n");
-  }, [contactMethod, description, suspiciousText, urgency, whatHappened]);
+  }, [contactMethod, description, selectedContact, suspiciousText, urgency, whatHappened]);
 
   return (
     <div className="space-y-8">
@@ -65,6 +72,22 @@ export default function FamilyHelpPage() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="block">
+                <span className="text-sm font-black text-ink">Trusted contact</span>
+                <select
+                  value={selectedContactId}
+                  onChange={(event) => setSelectedContactId(event.target.value)}
+                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+                >
+                  <option value="">No saved contact selected</option>
+                  {contacts.map((contact) => (
+                    <option key={contact.id} value={contact.id}>
+                      {contact.name} {contact.relation ? `(${contact.relation})` : ""}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="block">
                 <span className="text-sm font-black text-ink">Urgency level</span>
                 <select
                   value={urgency}
@@ -78,7 +101,7 @@ export default function FamilyHelpPage() {
                 </select>
               </label>
 
-              <label className="block">
+              <label className="block sm:col-span-2">
                 <span className="text-sm font-black text-ink">Preferred contact method</span>
                 <select
                   value={contactMethod}

@@ -10,22 +10,27 @@ import {
   Home,
   Info,
   LayoutDashboard,
+  PlayCircle,
   MessageCircle,
   Send,
   SearchCheck,
-  ShieldCheck
+  ShieldCheck,
+  Users
 } from "lucide-react";
 import { cn } from "@/lib/cn";
 
 export const navItems = [
   { href: "/", label: "Start", icon: Home },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/demo", label: "Demo", icon: PlayCircle },
   { href: "/analyze", label: "Analizuj", icon: SearchCheck },
   { href: "/history", label: "Historia", icon: History },
   { href: "/scams", label: "Baza oszustw", icon: Database },
   { href: "/lessons", label: "Lekcje", icon: BookOpen },
   { href: "/checklist", label: "Checklista", icon: CheckSquare },
   { href: "/family-help", label: "Pomoc rodziny", icon: MessageCircle },
+  { href: "/trusted-contacts", label: "Kontakty", icon: Users },
+  { href: "/scenario-simulator", label: "Symulator", icon: PlayCircle },
   { href: "/report", label: "Zgłoś incydent", icon: Send },
   { href: "/privacy-security", label: "Prywatność", icon: ShieldCheck },
   { href: "/about", label: "O aplikacji", icon: Info }

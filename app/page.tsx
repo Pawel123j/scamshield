@@ -1,10 +1,10 @@
 import Link from "next/link";
 import {
   ArrowRight,
-  BookOpen,
   CheckCircle2,
   Database,
   LockKeyhole,
+  PlayCircle,
   SearchCheck,
   ShieldCheck,
   Users
@@ -72,6 +72,13 @@ export default function LandingPage() {
               >
                 <Database aria-hidden="true" size={21} />
                 Explore scam database
+              </Link>
+              <Link
+                href="/demo"
+                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-cyan-200 bg-cyan-200 px-6 py-4 font-black text-ink transition hover:bg-white focus:outline-none focus:ring-4 focus:ring-white/40"
+              >
+                <PlayCircle aria-hidden="true" size={21} />
+                Start Interactive Demo
               </Link>
             </div>
           </div>

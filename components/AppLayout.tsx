@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
+import { DarkModeToggle } from "@/components/DarkModeToggle";
 import { Navbar } from "@/components/Navbar";
 import { SeniorModeToggle } from "@/components/SeniorModeToggle";
 import { Sidebar } from "@/components/Sidebar";
@@ -17,12 +18,19 @@ interface AppLayoutProps {
 export function AppLayout({ children }: AppLayoutProps) {
   const pathname = usePathname();
   const [seniorMode, setSeniorMode] = useLocalStorage<boolean>(storageKeys.seniorMode, false);
+  const [darkMode, setDarkMode] = useLocalStorage<boolean>(storageKeys.darkMode, false);
   const [menuOpen, setMenuOpen] = useState(false);
   const isLanding = pathname === "/";
 
   return (
-    <div className={cn("min-h-screen bg-mist text-ink antialiased", seniorMode && "senior-mode")}>
-      <Navbar seniorMode={seniorMode} setSeniorMode={setSeniorMode} onOpenMenu={() => setMenuOpen(true)} />
+    <div className={cn("min-h-screen bg-mist text-ink antialiased", seniorMode && "senior-mode", darkMode && "dark-mode")}>
+      <Navbar
+        seniorMode={seniorMode}
+        setSeniorMode={setSeniorMode}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+        onOpenMenu={() => setMenuOpen(true)}
+      />
 
       <div className={cn("mx-auto w-full", isLanding ? "max-w-none" : "grid max-w-7xl grid-cols-1 md:grid-cols-[260px_1fr]")}>
         {!isLanding && (
@@ -43,7 +51,10 @@ export function AppLayout({ children }: AppLayoutProps) {
           />
           <div className="absolute right-0 top-0 flex h-full w-[88vw] max-w-sm flex-col bg-mist shadow-soft">
             <div className="flex items-center justify-between border-b border-teal-100 p-4">
-              <SeniorModeToggle enabled={seniorMode} onChange={setSeniorMode} />
+              <div className="flex flex-col gap-2">
+                <SeniorModeToggle enabled={seniorMode} onChange={setSeniorMode} />
+                <DarkModeToggle enabled={darkMode} onChange={setDarkMode} />
+              </div>
               <button
                 type="button"
                 onClick={() => setMenuOpen(false)}

@@ -2,16 +2,19 @@
 
 import Link from "next/link";
 import { Menu, SearchCheck } from "lucide-react";
+import { DarkModeToggle } from "@/components/DarkModeToggle";
 import { Logo } from "@/components/Logo";
 import { SeniorModeToggle } from "@/components/SeniorModeToggle";
 
 interface NavbarProps {
   seniorMode: boolean;
   setSeniorMode: (enabled: boolean) => void;
+  darkMode: boolean;
+  setDarkMode: (enabled: boolean) => void;
   onOpenMenu: () => void;
 }
 
-export function Navbar({ seniorMode, setSeniorMode, onOpenMenu }: NavbarProps) {
+export function Navbar({ seniorMode, setSeniorMode, darkMode, setDarkMode, onOpenMenu }: NavbarProps) {
   return (
     <header className="sticky top-0 z-40 border-b border-teal-100 bg-white/92 backdrop-blur">
       <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
@@ -26,6 +29,7 @@ export function Navbar({ seniorMode, setSeniorMode, onOpenMenu }: NavbarProps) {
             Check a suspicious message
           </Link>
           <SeniorModeToggle enabled={seniorMode} onChange={setSeniorMode} />
+          <DarkModeToggle enabled={darkMode} onChange={setDarkMode} />
         </div>
 
         <button

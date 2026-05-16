@@ -1,4 +1,6 @@
-import { AlertTriangle, CheckCircle2 } from "lucide-react";
+import Link from "next/link";
+import { AlertTriangle, CheckCircle2, SearchCheck } from "lucide-react";
+import { CopyButton } from "@/components/CopyButton";
 import type { ScamExample } from "@/lib/types";
 import { RiskBadge } from "@/components/RiskBadge";
 
@@ -52,6 +54,17 @@ export function ScamCard({ scam }: ScamCardProps) {
       <blockquote className="mt-6 rounded-2xl border-l-4 border-coral bg-red-50 p-4 text-sm leading-6 text-red-900">
         “{scam.exampleMessage}”
       </blockquote>
+
+      <div className="mt-5 flex flex-wrap gap-3">
+        <CopyButton text={scam.exampleMessage} label="Copy example" variant="secondary" />
+        <Link
+          href={`/analyze?example=${encodeURIComponent(scam.exampleMessage)}&type=${encodeURIComponent("SMS")}`}
+          className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-tealguard px-5 py-3 font-bold text-white shadow-soft hover:bg-ocean focus:outline-none focus:ring-4 focus:ring-teal-200"
+        >
+          <SearchCheck aria-hidden="true" size={19} />
+          Analyze example
+        </Link>
+      </div>
     </article>
   );
 }

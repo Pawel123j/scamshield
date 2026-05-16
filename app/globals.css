@@ -75,6 +75,60 @@ select {
   color: #243b3a;
 }
 
+.dark-mode {
+  background: #020617;
+  color: #e2e8f0;
+}
+
+.dark-mode :where(header, aside) {
+  border-color: rgba(34, 211, 238, 0.22);
+}
+
+.dark-mode :where(.bg-mist) {
+  background-color: #020617;
+}
+
+.dark-mode :where(.bg-white) {
+  background-color: #0f172a;
+}
+
+.dark-mode :where(.bg-slate-50) {
+  background-color: #111827;
+}
+
+.dark-mode :where(.text-ink) {
+  color: #f8fafc;
+}
+
+.dark-mode :where(.text-slate-500, .text-slate-600, .text-slate-700) {
+  color: #cbd5e1;
+}
+
+.dark-mode :where(.border-teal-100, .border-slate-100, .border-slate-200) {
+  border-color: rgba(45, 212, 191, 0.24);
+}
+
+.dark-mode :where(input, textarea, select) {
+  background-color: #020617;
+  color: #f8fafc;
+  border-color: rgba(45, 212, 191, 0.32);
+}
+
+.dark-mode :where(input::placeholder, textarea::placeholder) {
+  color: #94a3b8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
 .hero-scene {
   background:
     linear-gradient(135deg, rgba(20, 33, 31, 0.86), rgba(15, 118, 110, 0.58)),

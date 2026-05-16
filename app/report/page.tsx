@@ -123,6 +123,14 @@ export default function ReportPage() {
         })}
       </section>
 
+      <section className="rounded-3xl border border-cyan-100 bg-cyan-50 p-6 text-cyan-950 shadow-soft">
+        <h2 className="text-2xl font-black">Official reporting guidance</h2>
+        <p className="mt-3 leading-7">
+          For real incidents, use official channels only. Search manually for CERT Polska, NASK, Policja and your bank
+          official hotline. Do not use links from suspicious messages to report or verify an incident.
+        </p>
+      </section>
+
       <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
         <div className="rounded-3xl border border-teal-100 bg-white p-6 shadow-soft">
           <h2 className="flex items-center gap-2 text-2xl font-black text-ink">

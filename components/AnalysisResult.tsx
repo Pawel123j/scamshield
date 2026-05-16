@@ -1,4 +1,4 @@
-import { AlertTriangle, CheckCircle2, ShieldAlert } from "lucide-react";
+import { AlertTriangle, CheckCircle2, ListChecks, ShieldAlert } from "lucide-react";
 import { CopyButton } from "@/components/CopyButton";
 import { PDFExportButton } from "@/components/PDFExportButton";
 import { RiskScoreCard } from "@/components/RiskScoreCard";
@@ -21,7 +21,19 @@ export function AnalysisResult({ result }: AnalysisResultProps) {
             <ShieldAlert aria-hidden="true" className="mt-1 shrink-0 text-tealguard" size={24} />
             <div>
               <h2 className="text-2xl font-black text-ink">Analysis summary</h2>
-              <p className="mt-2 text-lg leading-8 text-slate-700">{result.summary}</p>
+              <p className="mt-2 text-lg font-bold leading-8 text-slate-700">{result.shortSummary}</p>
+              <p className="mt-2 leading-7 text-slate-700">{result.detailedExplanation}</p>
+              <div className="mt-4 flex flex-wrap gap-2 text-sm font-bold">
+                <span className="rounded-full bg-teal-50 px-3 py-1 text-tealguard">
+                  Category: {result.dominantCategory.replace(/_/g, " ")}
+                </span>
+                <span className="rounded-full bg-cyan-50 px-3 py-1 text-cyan-800">
+                  {result.confidence} confidence
+                </span>
+                {result.wasTruncated && (
+                  <span className="rounded-full bg-amber-50 px-3 py-1 text-amber-900">Input was truncated for safety</span>
+                )}
+              </div>
               <p className="mt-3 text-sm leading-6 text-slate-600">
                 The score is explainable: each warning sign contributes points, and contextual combinations can add
                 extra weight. The final score is clamped to 100.
@@ -51,9 +63,9 @@ export function AnalysisResult({ result }: AnalysisResultProps) {
                   </span>
                 </div>
                 <p className="mt-1 text-sm leading-6 text-slate-600">{indicator.description}</p>
-                {indicator.matchedTerms && indicator.matchedTerms.length > 0 && (
+                {indicator.matchedKeywords && indicator.matchedKeywords.length > 0 && (
                   <p className="mt-2 text-xs font-semibold text-slate-500">
-                    Match: {indicator.matchedTerms.slice(0, 3).join(", ")}
+                    Match: {indicator.matchedKeywords.slice(0, 3).join(", ")}
                   </p>
                 )}
               </article>
@@ -65,6 +77,23 @@ export function AnalysisResult({ result }: AnalysisResultProps) {
       </section>
 
       <ScoringBreakdown items={result.scoringBreakdown} />
+
+      <section className="rounded-3xl border border-teal-100 bg-white p-6 shadow-soft">
+        <h2 className="flex items-center gap-2 text-xl font-black text-ink">
+          <ListChecks aria-hidden="true" className="text-tealguard" size={22} />
+          What should I do now?
+        </h2>
+        <ol className="mt-4 space-y-3 text-slate-700">
+          {result.nextSteps.map((step, index) => (
+            <li key={step} className="flex gap-3">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-tealguard text-sm font-black text-white">
+                {index + 1}
+              </span>
+              <span>{step}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
 
       <section className="rounded-3xl border border-teal-100 bg-white p-6 shadow-soft">
         <div className="flex flex-wrap items-center justify-between gap-3">

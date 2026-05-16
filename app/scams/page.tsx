@@ -9,6 +9,7 @@ import { scamExamples } from "@/data/scams";
 export default function ScamsPage() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
+  const [risk, setRisk] = useState("All");
   const categories = ["All", ...Array.from(new Set(scamExamples.map((scam) => scam.category)))];
 
   const filteredScams = useMemo(() => {
@@ -16,15 +17,16 @@ export default function ScamsPage() {
 
     return scamExamples.filter((scam) => {
       const matchesCategory = category === "All" || scam.category === category;
+      const matchesRisk = risk === "All" || scam.riskLevel === risk;
       const matchesQuery =
         !normalizedQuery ||
         [scam.title, scam.category, scam.howItWorks, scam.exampleMessage].some((value) =>
           value.toLowerCase().includes(normalizedQuery)
         );
 
-      return matchesCategory && matchesQuery;
+      return matchesCategory && matchesRisk && matchesQuery;
     });
-  }, [category, query]);
+  }, [category, query, risk]);
 
   return (
     <div className="space-y-8">
@@ -38,7 +40,7 @@ export default function ScamsPage() {
       </section>
 
       <section className="rounded-3xl border border-teal-100 bg-white p-5 shadow-soft">
-        <div className="grid gap-4 lg:grid-cols-[1fr_280px]">
+        <div className="grid gap-4 lg:grid-cols-[1fr_240px_220px]">
           <label className="block">
             <span className="text-sm font-black text-ink">Search scams</span>
             <span className="mt-2 flex min-h-12 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 focus-within:border-tealguard focus-within:ring-4 focus-within:ring-teal-200">
@@ -66,7 +68,30 @@ export default function ScamsPage() {
               ))}
             </select>
           </label>
+
+          <label className="block">
+            <span className="text-sm font-black text-ink">Risk</span>
+            <select
+              value={risk}
+              onChange={(event) => setRisk(event.target.value)}
+              className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+            >
+              <option>All</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </label>
         </div>
+      </section>
+
+      <section className="rounded-3xl border border-cyan-100 bg-cyan-50 p-5 text-cyan-950 shadow-soft">
+        <h2 className="text-xl font-black">Official reporting guidance</h2>
+        <p className="mt-2 leading-7">
+          Always type the official website address manually or search for the institution yourself instead of clicking
+          links from suspicious messages. Useful official starting points include CERT Polska, NASK, Policja and your
+          bank official hotline.
+        </p>
       </section>
 
       {filteredScams.length === 0 ? (

@@ -1,10 +1,13 @@
-import type { AnalysisResult, RiskLevel } from "@/lib/types";
+import type { AnalysisResult, ConfidenceLevel, RiskLevel, ScamCategory } from "@/lib/types";
 
 export const storageKeys = {
   analysisHistory: "scamshield.analysisHistory",
   checklist: "scamshield.checklist",
   lessons: "scamshield.lessons",
-  seniorMode: "scamshield.seniorMode"
+  seniorMode: "scamshield.seniorMode",
+  darkMode: "scamshield.darkMode",
+  trustedContacts: "scamshield.trustedContacts",
+  scenarioScore: "scamshield.scenarioScore"
 } as const;
 
 function canUseStorage() {
@@ -79,6 +82,34 @@ function normalizeLevel(level: unknown): RiskLevel {
   return "low";
 }
 
+function normalizeConfidence(confidence: unknown): ConfidenceLevel {
+  const value = String(confidence).toLowerCase();
+
+  if (value === "high" || value === "medium" || value === "low") {
+    return value;
+  }
+
+  return "low";
+}
+
+function normalizeCategory(category: unknown): ScamCategory {
+  const value = String(category);
+  const allowed: ScamCategory[] = [
+    "phishing",
+    "banking_fraud",
+    "blik_fraud",
+    "delivery_scam",
+    "investment_scam",
+    "crypto_scam",
+    "remote_access_scam",
+    "identity_theft",
+    "social_engineering",
+    "safe_message"
+  ];
+
+  return allowed.includes(value as ScamCategory) ? (value as ScamCategory) : "phishing";
+}
+
 function normalizeAnalysisItem(item: Record<string, unknown>): AnalysisResult | null {
   if (!item || typeof item !== "object") {
     return null;
@@ -104,8 +135,12 @@ function normalizeAnalysisItem(item: Record<string, unknown>): AnalysisResult | 
       description: String(indicator.description ?? ""),
       points: Number(indicator.points ?? indicator.weight ?? 0),
       severity: normalizeLevel(indicator.severity),
-      category: indicator.category as AnalysisResult["indicators"][number]["category"],
-      matchedTerms: Array.isArray(indicator.matchedTerms) ? (indicator.matchedTerms as string[]) : []
+      category: normalizeCategory(indicator.category),
+      matchedKeywords: Array.isArray(indicator.matchedKeywords)
+        ? indicator.matchedKeywords.map((keyword) => String(keyword))
+        : Array.isArray(indicator.matchedTerms)
+          ? indicator.matchedTerms.map((keyword) => String(keyword))
+          : []
     }));
 
   if (!item.id || !item.createdAt || !item.messageType || Number.isNaN(score)) {
@@ -118,13 +153,22 @@ function normalizeAnalysisItem(item: Record<string, unknown>): AnalysisResult | 
     messageType: item.messageType as AnalysisResult["messageType"],
     originalText,
     preview: String(item.preview ?? (originalText.length > 140 ? `${originalText.slice(0, 137)}...` : originalText)),
+    maskedPreview: String(item.maskedPreview ?? item.preview ?? (originalText.length > 140 ? `${originalText.slice(0, 137)}...` : originalText)),
     score,
     level: normalizeLevel(item.level),
+    dominantCategory: normalizeCategory(item.dominantCategory),
+    confidence: normalizeConfidence(item.confidence),
+    shortSummary: String(item.shortSummary ?? item.summary ?? "Saved analysis"),
+    detailedExplanation: String(item.detailedExplanation ?? item.summary ?? "Saved analysis"),
     summary: String(item.summary ?? "Saved analysis"),
     indicators: normalizedIndicators,
     recommendations: recommendations.map((recommendation) => String(recommendation)),
+    nextSteps: Array.isArray(item.nextSteps)
+      ? item.nextSteps.map((step) => String(step))
+      : recommendations.map((recommendation) => String(recommendation)),
     scoringBreakdown: Array.isArray(item.scoringBreakdown)
       ? (item.scoringBreakdown as AnalysisResult["scoringBreakdown"])
-      : [{ label: "Legacy saved score", points: score }]
+      : [{ label: "Legacy saved score", points: score }],
+    wasTruncated: Boolean(item.wasTruncated)
   };
 }

@@ -55,6 +55,11 @@ export default function ChecklistPage() {
         <div className="mt-5 h-4 overflow-hidden rounded-full bg-slate-100" aria-hidden="true">
           <div className="h-full rounded-full bg-tealguard transition-all" style={{ width: `${progress}%` }} />
         </div>
+        {completedCount === 0 && (
+          <p className="mt-4 rounded-2xl bg-teal-50 p-4 text-sm font-semibold leading-6 text-tealguard">
+            No checklist progress yet. Start with one habit, such as “I do not click suspicious links.”
+          </p>
+        )}
       </section>
 
       <section className="grid gap-4 lg:grid-cols-2">
