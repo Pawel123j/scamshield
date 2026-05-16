@@ -54,15 +54,16 @@ export default function AboutPage() {
           </span>
           <div>
             <h2 className="text-2xl font-black text-ink">How the analyzer works</h2>
-            <p className="mt-3 leading-7 text-slate-700">
-              ScamShield Senior checks text against a local TypeScript rule set. It detects common phishing signals:
-              links, shortened URLs, BLIK requests, card data requests, PESEL/login/password prompts, urgency, bank
-              threats, delivery fees, fake investments, crypto promises, remote desktop tools and secrecy language.
-            </p>
-            <p className="mt-3 leading-7 text-slate-700">
-              The score is intentionally explainable. A high score means the user should stop, avoid clicking, and verify
-              the situation using official contact details or trusted family support.
-            </p>
+        <p className="mt-3 leading-7 text-slate-700">
+          ScamShield Senior checks text against a local TypeScript rule set. It detects common phishing signals:
+          links, shortened URLs, BLIK requests, card data requests, PESEL/login/password prompts, urgency, bank
+          threats, delivery fees, fake investments, crypto promises, remote desktop tools and secrecy language.
+        </p>
+        <p className="mt-3 leading-7 text-slate-700">
+          The score is intentionally explainable. The result includes detected indicators, a scoring breakdown,
+          recommendations, copy actions and an optional PDF report. A high score means the user should stop, avoid
+          clicking, and verify the situation using official contact details or trusted family support.
+        </p>
           </div>
         </div>
       </section>
@@ -74,7 +75,7 @@ export default function AboutPage() {
         <p className="mt-3 leading-7 text-slate-700">
           This project demonstrates a fullstack-ready Next.js architecture without paid APIs: typed data models,
           reusable UI components, LocalStorage persistence, accessible forms, responsive layout, unit-testable analysis
-          logic and a cybersecurity education flow.
+          logic, incident reporting guidance, privacy-first product thinking and a cybersecurity education flow.
         </p>
         <Link
           href="/analyze"

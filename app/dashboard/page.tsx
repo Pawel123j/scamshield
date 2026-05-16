@@ -7,6 +7,7 @@ import {
   Database,
   History,
   MessageCircle,
+  Send,
   SearchCheck,
   ShieldAlert,
   ShieldCheck,
@@ -15,6 +16,7 @@ import {
 import { EmptyState } from "@/components/EmptyState";
 import { RiskBadge } from "@/components/RiskBadge";
 import { StatCard } from "@/components/StatCard";
+import { safetyChecklist } from "@/data/checklist";
 import { lessons } from "@/data/lessons";
 import { scamExamples } from "@/data/scams";
 import { useAnalysisHistory } from "@/hooks/useAnalysisHistory";
@@ -54,6 +56,12 @@ const dashboardActions = [
     icon: MessageCircle
   },
   {
+    title: "Report a scam",
+    description: "Get practical steps and generate an incident summary for trusted contacts or institutions.",
+    href: "/report",
+    icon: Send
+  },
+  {
     title: "Recent analyses",
     description: "Review saved analysis results stored only on this device.",
     href: "/history",
@@ -64,8 +72,10 @@ const dashboardActions = [
 export default function DashboardPage() {
   const { history, hasLoaded } = useAnalysisHistory();
   const [lessonProgress] = useLocalStorage<Record<string, boolean>>(storageKeys.lessons, {});
+  const [checklistProgress] = useLocalStorage<Record<string, boolean>>(storageKeys.checklist, {});
   const completedLessons = Object.values(lessonProgress).filter(Boolean).length;
-  const highRiskCount = history.filter((item) => item.level === "High").length;
+  const completedChecklist = Object.values(checklistProgress).filter(Boolean).length;
+  const highRiskCount = history.filter((item) => item.level === "high").length;
 
   return (
     <div className="space-y-8">
@@ -88,7 +98,7 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Statystyki">
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5" aria-label="Dashboard statistics">
         <StatCard
           label="Messages analyzed"
           value={42 + history.length}
@@ -112,6 +122,12 @@ export default function DashboardPage() {
           value={scamExamples.length}
           helper="Common scam patterns available without an account."
           icon={Database}
+        />
+        <StatCard
+          label="Checklist progress"
+          value={`${completedChecklist}/${safetyChecklist.length}`}
+          helper="Local safety habits checked on this device."
+          icon={CheckSquare}
         />
       </section>
 
@@ -181,7 +197,7 @@ export default function DashboardPage() {
                   <tr key={item.id} className="border-b border-slate-100">
                     <td className="py-4 pr-4 text-sm text-slate-600">{formatDateTime(item.createdAt)}</td>
                     <td className="py-4 pr-4 font-semibold text-ink">{item.messageType}</td>
-                    <td className="max-w-md py-4 pr-4 text-sm text-slate-600">{item.inputText.slice(0, 90)}</td>
+                    <td className="max-w-md py-4 pr-4 text-sm text-slate-600">{item.preview}</td>
                     <td className="py-4 pr-4">
                       <RiskBadge level={item.level} compact />
                     </td>

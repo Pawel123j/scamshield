@@ -5,7 +5,7 @@ export const scamExamples: ScamExample[] = [
     id: "fake-bank-consultant",
     title: "Fałszywy konsultant banku",
     category: "Bankowość",
-    riskLevel: "High",
+    riskLevel: "high",
     howItWorks:
       "Przestępca dzwoni i podaje się za pracownika banku. Mówi, że konto jest zagrożone, a następnie prosi o instalację aplikacji, kod BLIK albo dane logowania.",
     warningSigns: [
@@ -25,7 +25,7 @@ export const scamExamples: ScamExample[] = [
     id: "fake-delivery-payment",
     title: "Fałszywa dopłata do przesyłki",
     category: "Dostawy",
-    riskLevel: "High",
+    riskLevel: "high",
     howItWorks:
       "SMS informuje o małej dopłacie do paczki. Link prowadzi do fałszywej strony płatności, która wyłudza dane karty.",
     warningSigns: [
@@ -45,7 +45,7 @@ export const scamExamples: ScamExample[] = [
     id: "blik-scam",
     title: "Wyłudzenie kodu BLIK",
     category: "Płatności",
-    riskLevel: "High",
+    riskLevel: "high",
     howItWorks:
       "Oszust podszywa się pod znajomego lub członka rodziny i prosi o szybki kod BLIK. Po zatwierdzeniu transakcji pieniądze trafiają do przestępcy.",
     warningSigns: [
@@ -65,7 +65,7 @@ export const scamExamples: ScamExample[] = [
     id: "fake-police-officer",
     title: "Fałszywy policjant",
     category: "Podszywanie się",
-    riskLevel: "High",
+    riskLevel: "high",
     howItWorks:
       "Dzwoni osoba podająca się za policjanta i mówi, że pieniądze seniora są częścią tajnej akcji. Prosi o przekazanie gotówki lub wykonanie przelewu.",
     warningSigns: [
@@ -85,7 +85,7 @@ export const scamExamples: ScamExample[] = [
     id: "fake-grandchild",
     title: "Oszustwo na wnuczka",
     category: "Rodzina",
-    riskLevel: "High",
+    riskLevel: "high",
     howItWorks:
       "Przestępca udaje wnuka, córkę lub syna. Opowiada o wypadku, długu lub pilnej potrzebie pieniędzy.",
     warningSigns: [
@@ -105,7 +105,7 @@ export const scamExamples: ScamExample[] = [
     id: "fake-investment-platform",
     title: "Fałszywa platforma inwestycyjna",
     category: "Inwestycje",
-    riskLevel: "High",
+    riskLevel: "high",
     howItWorks:
       "Reklama obiecuje wysokie zyski bez ryzyka. Konsultant prowadzi ofiarę przez rejestrację i zachęca do coraz większych wpłat.",
     warningSigns: [
@@ -125,7 +125,7 @@ export const scamExamples: ScamExample[] = [
     id: "fake-crypto-profit",
     title: "Fałszywy zysk z kryptowalut",
     category: "Kryptowaluty",
-    riskLevel: "High",
+    riskLevel: "high",
     howItWorks:
       "Ofiara widzi fałszywy panel z rosnącym zyskiem. Aby wypłacić pieniądze, musi opłacić prowizję, podatek albo kolejną inwestycję.",
     warningSigns: [
@@ -145,7 +145,7 @@ export const scamExamples: ScamExample[] = [
     id: "fake-marketplace-buyer",
     title: "Fałszywy kupujący OLX/Vinted",
     category: "Zakupy online",
-    riskLevel: "High",
+    riskLevel: "high",
     howItWorks:
       "Kupujący wysyła link do rzekomego odbioru pieniędzy. Strona udaje płatność, ale prosi sprzedawcę o dane karty.",
     warningSigns: [
@@ -165,7 +165,7 @@ export const scamExamples: ScamExample[] = [
     id: "fake-invoice",
     title: "Fałszywa faktura",
     category: "E-mail",
-    riskLevel: "Medium",
+    riskLevel: "medium",
     howItWorks:
       "E-mail z załącznikiem udaje fakturę, wezwanie do zapłaty lub korektę. Załącznik może zawierać złośliwe oprogramowanie.",
     warningSigns: [
@@ -185,7 +185,7 @@ export const scamExamples: ScamExample[] = [
     id: "fake-job-offer",
     title: "Fałszywa oferta pracy",
     category: "Praca",
-    riskLevel: "Medium",
+    riskLevel: "medium",
     howItWorks:
       "Oferta obiecuje łatwy zarobek za proste zadania. Następnie wymaga opłaty aktywacyjnej, danych dokumentu albo instalacji aplikacji.",
     warningSigns: [
@@ -205,7 +205,7 @@ export const scamExamples: ScamExample[] = [
     id: "malware-link",
     title: "Link do złośliwego oprogramowania",
     category: "Malware",
-    riskLevel: "High",
+    riskLevel: "high",
     howItWorks:
       "Wiadomość zachęca do pobrania pliku, aktualizacji lub aplikacji. Po instalacji program może kraść hasła i SMS-y.",
     warningSigns: [
@@ -225,7 +225,7 @@ export const scamExamples: ScamExample[] = [
     id: "remote-desktop-scam",
     title: "Oszustwo na zdalny pulpit",
     category: "Zdalny dostęp",
-    riskLevel: "High",
+    riskLevel: "high",
     howItWorks:
       "Przestępca prosi o instalację aplikacji do zdalnego dostępu, aby rzekomo pomóc w bankowości, inwestycji lub zwrocie pieniędzy.",
     warningSigns: [

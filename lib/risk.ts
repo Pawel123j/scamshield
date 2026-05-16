@@ -2,34 +2,56 @@ import type { RiskLevel } from "@/lib/types";
 
 export function getRiskLevel(score: number): RiskLevel {
   if (score <= 30) {
-    return "Low";
+    return "low";
   }
 
   if (score <= 60) {
-    return "Medium";
+    return "medium";
   }
 
-  return "High";
+  return "high";
 }
 
 export function getRiskLabel(level: RiskLevel) {
   switch (level) {
-    case "Low":
-      return "Niskie ryzyko";
-    case "Medium":
-      return "Średnie ryzyko";
-    case "High":
-      return "Wysokie ryzyko";
+    case "low":
+      return "Low risk";
+    case "medium":
+      return "Medium risk";
+    case "high":
+      return "High risk";
+  }
+}
+
+export function getRiskRange(level: RiskLevel) {
+  switch (level) {
+    case "low":
+      return "0-30";
+    case "medium":
+      return "31-60";
+    case "high":
+      return "61-100";
   }
 }
 
 export function getRiskTone(level: RiskLevel) {
   switch (level) {
-    case "Low":
+    case "low":
       return "border-emerald-200 bg-emerald-50 text-emerald-800";
-    case "Medium":
+    case "medium":
       return "border-amber-200 bg-amber-50 text-amber-900";
-    case "High":
+    case "high":
       return "border-red-200 bg-red-50 text-red-800";
+  }
+}
+
+export function getRiskBarColor(level: RiskLevel) {
+  switch (level) {
+    case "low":
+      return "bg-emerald-500";
+    case "medium":
+      return "bg-amber-500";
+    case "high":
+      return "bg-red-500";
   }
 }

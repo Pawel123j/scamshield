@@ -1,42 +1,160 @@
 # ScamShield Senior
 
-ScamShield Senior is a senior-friendly cybersecurity awareness and anti-scam assistant. It helps users check suspicious SMS messages, e-mails, phone call scripts, bank alerts, delivery messages, BLIK requests, fake investment offers and phishing attempts.
+**ScamShield Senior** is a cybersecurity awareness web app that helps seniors detect phishing, scam messages, fake bank alerts, BLIK fraud, delivery scams, and social engineering attempts using a rule-based risk analysis engine.
 
-The app is designed for seniors, family members and anyone learning basic scam prevention. It uses a transparent rule-based risk engine instead of a paid AI API, so the analysis is explainable, local and easy to extend.
+Live demo: _Add deployment link here._
+
+GitHub short description:
+
+```txt
+ScamShield Senior is a cybersecurity awareness web app that helps seniors detect phishing, scam messages, fake bank alerts, BLIK fraud, delivery scams, and social engineering attempts using a rule-based risk analysis engine.
+```
+
+## Screenshots
+
+### Landing Page
+![Landing Page](public/screenshots/landing-page.png)
+
+### Dashboard
+![Dashboard](public/screenshots/dashboard.png)
+
+### Scam Analyzer
+![Scam Analyzer](public/screenshots/analyzer.png)
+
+### Analysis Result
+![Analysis Result](public/screenshots/analysis-result.png)
+
+### Scam Database
+![Scam Database](public/screenshots/scam-database.png)
+
+### Cyber Lessons
+![Cyber Lessons](public/screenshots/lessons.png)
+
+### Senior Mode
+![Senior Mode](public/screenshots/senior-mode.png)
 
 ## Features
 
-- Landing page with trust-focused cybersecurity positioning
-- Dashboard with quick actions, seeded statistics and recent analyses
-- Scam Analyzer with message type selection, risk score, detected warning signs and recommended actions
-- Local analysis history with details and deletion
-- Static scam database with realistic Polish examples
-- Cyber lessons for seniors with mini quizzes and saved progress
-- Safety checklist persisted in LocalStorage
+- Modern landing page for a cybersecurity awareness product
+- Dashboard with quick actions, local stats, education progress and recent analyses
+- Explainable scam analyzer with 0-100 risk scoring
+- Risk levels: low, medium and high
+- Detected indicators with point values and matched warning terms
+- Scoring breakdown that explains how the score was calculated
+- Recommended actions for safe next steps
+- Analysis history stored in LocalStorage with filters and delete controls
+- Scam database with realistic Polish examples
+- Senior-friendly cybersecurity lessons with quizzes and saved progress
+- Safety checklist with persistent progress
 - Family help message generator with copy-to-clipboard
-- Senior Mode toggle with larger text, buttons, spacing and higher contrast
-- Accessible, responsive UI with semantic HTML and keyboard-friendly controls
-- Rule-based TypeScript scam engine with unit-test examples
+- Incident report guide and copyable incident summary
+- Privacy & Security page explaining local analysis and LocalStorage limits
+- Senior Mode for larger text, bigger actions and improved contrast
+- Optional PDF report export for analysis results
+- GitHub Actions CI workflow
+- Vitest test cases for the rule engine
 
 ## Tech Stack
 
 - Next.js App Router
-- TypeScript
 - React
+- TypeScript
 - Tailwind CSS
-- LocalStorage persistence
-- Vitest for rule-engine tests
-- lucide-react icons
+- LocalStorage
+- lucide-react
+- jsPDF
+- Vitest
+- GitHub Actions
 
-## Screenshots
+## Project Structure
 
-Add screenshots here after running the app locally:
+```txt
+app/
+  page.tsx
+  dashboard/
+  analyze/
+  history/
+  scams/
+  lessons/
+  checklist/
+  family-help/
+  report/
+  privacy-security/
+  about/
+components/
+  AppLayout.tsx
+  Navbar.tsx
+  Sidebar.tsx
+  RiskBadge.tsx
+  RiskScoreCard.tsx
+  ScamCard.tsx
+  LessonCard.tsx
+  ChecklistItem.tsx
+  EmptyState.tsx
+  SeniorModeToggle.tsx
+  StatCard.tsx
+  CopyButton.tsx
+  AnalysisResult.tsx
+  ScoringBreakdown.tsx
+  PDFExportButton.tsx
+  ExampleMessageButton.tsx
+data/
+  scams.ts
+  lessons.ts
+  checklist.ts
+  examples.ts
+hooks/
+  useAnalysisHistory.ts
+  useLocalStorage.ts
+lib/
+  scamAnalyzer.ts
+  localStorage.ts
+  pdf.ts
+  risk.ts
+  types.ts
+tests/
+  scamAnalyzer.test.ts
+public/
+  screenshots/
+```
 
-- Landing page
-- Dashboard
-- Scam Analyzer result
-- Scam database
-- Lessons and checklist
+## Cybersecurity Value
+
+ScamShield Senior helps users pause before acting on manipulative messages. The rule engine detects warning signs such as:
+
+- suspicious links and shortened URLs
+- fake bank wording
+- fake delivery payment requests
+- BLIK code requests
+- card, PESEL, login and password requests
+- urgency and pressure language
+- police, court, debt and blocked-account threats
+- fake investment and cryptocurrency profit promises
+- AnyDesk, TeamViewer and remote desktop scams
+- secrecy requests and unknown-sender stories
+
+The app does not claim to prove whether something is safe. It teaches safer decision-making and gives practical next steps.
+
+## Privacy-First Approach
+
+- Analysis is rule-based and local to the app.
+- No real AI API is used.
+- No account is required.
+- Message history is stored in browser LocalStorage.
+- LocalStorage is not encrypted, so users should not store real passwords, full card numbers, PESEL numbers or authorization codes.
+- Users can clear history from the History page.
+- Real incidents should be verified through official bank, police or cybersecurity support channels.
+
+## Accessibility Notes
+
+- Semantic pages and headings
+- Clear labels for forms
+- Keyboard-friendly buttons and links
+- Large click targets
+- Visible focus rings
+- Strong risk colors for low, medium and high results
+- Senior Mode for larger text, spacing and contrast
+- Responsive layouts for mobile and desktop
 
 ## Run Locally
 
@@ -47,59 +165,63 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-Production build:
+## Test and Build
 
 ```bash
+npm run lint
+npm test -- --run
 npm run build
-npm run start
 ```
-
-Run tests:
-
-```bash
-npm run test
-```
-
-## Folder Structure
-
-```text
-app/
-  analyze/        Scam analyzer route
-  dashboard/      Dashboard route
-  history/        Saved analysis history route
-  scams/          Scam database route
-  lessons/        Learning route with quizzes
-  checklist/      Safety checklist route
-  family-help/    Family message generator route
-  about/          Project and methodology route
-components/       Reusable UI components
-data/             Static scams, lessons and checklist content
-hooks/            LocalStorage and history hooks
-lib/              Types, risk utilities, scam analysis engine
-tests/            Scam engine test cases
-```
-
-## Cybersecurity Learning Value
-
-ScamShield Senior teaches users to pause before acting. The analyzer highlights common manipulation patterns: suspicious links, shortened URLs, payment requests, BLIK codes, PESEL/login/password requests, pressure language, fake bank threats, delivery fee scams, investment promises, cryptocurrency fraud, secrecy requests and remote desktop tools.
-
-The app includes a clear disclaimer: it supports awareness and triage, but it does not replace a bank, police or cybersecurity authority.
 
 ## Portfolio Description
 
-This project demonstrates a complete product-style frontend with local persistence, typed domain models, reusable components, accessible forms, responsive layouts and a deterministic analysis engine. It is intentionally built without paid APIs so it can be cloned, reviewed and extended easily.
+ScamShield Senior is a cybersecurity-focused web application created to help seniors and their families recognize phishing, scam messages, fake bank alerts, BLIK fraud, delivery scams, and social engineering attempts.
+
+The application includes a rule-based risk analysis engine that calculates a risk score from 0 to 100, detects warning signs, explains threats in simple language, and suggests safe next steps. It also contains a scam database, cybersecurity lessons, safety checklist, analysis history, family help message generator, incident reporting guidance, privacy and security page, and a senior-friendly interface mode.
+
+The project was built with Next.js, TypeScript, React, Tailwind CSS and LocalStorage. It demonstrates practical knowledge of frontend development, cybersecurity awareness, phishing detection logic, accessibility, privacy-first design and user-centered product thinking.
+
+## CV Description
+
+```txt
+ScamShield Senior — Cybersecurity Awareness Web App
+
+Designed and developed a Next.js web application that helps seniors detect phishing, scam messages, fake bank alerts, BLIK fraud and social engineering attempts. Built a rule-based risk analysis engine in TypeScript, implemented risk scoring, analysis history, scam database, cybersecurity lessons, safety checklist, incident reporting guide, Senior Mode and privacy-first LocalStorage persistence.
+```
+
+## GitHub Topics
+
+```txt
+cybersecurity
+phishing
+scam-detection
+nextjs
+typescript
+react
+tailwindcss
+security-awareness
+senior-friendly
+accessibility
+social-engineering
+portfolio-project
+```
 
 ## Future Improvements
 
-- Real AI/NLP integration
-- Browser extension
-- SMS import
-- Family accounts
-- Admin panel
+- Real AI/NLP integration for more advanced scam detection
+- Browser extension for checking suspicious websites
+- SMS import and mobile app version
+- Family account system
+- Admin panel for managing scam examples
 - Real-time scam alerts
-- Polish CERT/NASK scam feed integration
-- PDF reports
+- CERT Polska / NASK feed integration
+- PDF export improvements
 - Multi-language support
+- Voice assistant mode for seniors
+- Offline PWA support
+- Dark mode
+- Admin dashboard with scam statistics
+- Report sharing with trusted contacts
 
 ## Disclaimer
 

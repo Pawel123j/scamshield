@@ -40,5 +40,15 @@ export const safetyChecklist: ChecklistItem[] = [
     id: "updates",
     label: "Aktualizuję telefon i aplikacje",
     description: "Aktualizacje zamykają znane luki bezpieczeństwa."
+  },
+  {
+    id: "no-remote-access",
+    label: "Nie instaluję zdalnego dostępu dla obcych",
+    description: "AnyDesk, TeamViewer i podobne narzędzia uruchamiam tylko dla osób, którym naprawdę ufam."
+  },
+  {
+    id: "no-investment-promises",
+    label: "Nie ufam obietnicom pewnego zysku",
+    description: "Gwarantowany szybki zarobek od nieznanej osoby traktuję jako poważny sygnał ostrzegawczy."
   }
 ];

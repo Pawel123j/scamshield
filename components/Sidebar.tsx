@@ -11,7 +11,9 @@ import {
   Info,
   LayoutDashboard,
   MessageCircle,
-  SearchCheck
+  Send,
+  SearchCheck,
+  ShieldCheck
 } from "lucide-react";
 import { cn } from "@/lib/cn";
 
@@ -24,6 +26,8 @@ export const navItems = [
   { href: "/lessons", label: "Lekcje", icon: BookOpen },
   { href: "/checklist", label: "Checklista", icon: CheckSquare },
   { href: "/family-help", label: "Pomoc rodziny", icon: MessageCircle },
+  { href: "/report", label: "Zgłoś incydent", icon: Send },
+  { href: "/privacy-security", label: "Prywatność", icon: ShieldCheck },
   { href: "/about", label: "O aplikacji", icon: Info }
 ] as const;
 

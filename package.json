@@ -7,10 +7,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "test": "vitest run"
+    "lint": "eslint .",
+    "test": "vitest"
   },
   "dependencies": {
+    "jspdf": "^2.5.2",
     "lucide-react": "^0.468.0",
     "next": "^15.0.4",
     "react": "^19.0.0",

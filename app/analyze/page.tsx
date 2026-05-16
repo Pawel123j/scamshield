@@ -1,30 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { ClipboardPaste, RotateCcw, SearchCheck } from "lucide-react";
+import Link from "next/link";
+import { RotateCcw, SearchCheck, ShieldCheck } from "lucide-react";
 import { AnalysisResult } from "@/components/AnalysisResult";
 import { Disclaimer } from "@/components/Disclaimer";
+import { ExampleMessageButton } from "@/components/ExampleMessageButton";
+import { exampleMessages, type ExampleMessage } from "@/data/examples";
 import { useAnalysisHistory } from "@/hooks/useAnalysisHistory";
 import { analyzeMessage, messageTypes } from "@/lib/scamAnalyzer";
 import type { AnalysisResult as AnalysisResultType, MessageType } from "@/lib/types";
-
-const sampleMessages = [
-  {
-    label: "Bank SMS",
-    type: "Bank message" as MessageType,
-    text: "Twoje konto zostanie zablokowane w ciągu 24h. Kliknij link i potwierdź dane: https://secure-bank-login.top"
-  },
-  {
-    label: "BLIK request",
-    type: "BLIK request" as MessageType,
-    text: "Mamo, mam nowy numer. Pilnie potrzebuję zapłacić rachunek. Podaj kod BLIK, oddam wieczorem i nie mów nikomu."
-  },
-  {
-    label: "Delivery fee",
-    type: "Delivery message" as MessageType,
-    text: "Paczka czeka na doręczenie. Dopłać 1,49 zł za przesyłkę: bit.ly/paczka-doplata"
-  }
-];
 
 export default function AnalyzePage() {
   const [messageType, setMessageType] = useState<MessageType>("SMS");
@@ -32,21 +17,23 @@ export default function AnalyzePage() {
   const [result, setResult] = useState<AnalysisResultType | null>(null);
   const { addAnalysis } = useAnalysisHistory();
 
-  const handleAnalyze = () => {
-    const analysis = analyzeMessage(messageType, text);
+  const runAnalysis = (type: MessageType, content: string) => {
+    const analysis = analyzeMessage(type, content);
     setResult(analysis);
 
-    if (analysis.inputText.trim()) {
+    if (analysis.originalText.trim()) {
       addAnalysis(analysis);
     }
   };
 
-  const handleSample = (sample: (typeof sampleMessages)[number]) => {
-    setMessageType(sample.type);
-    setText(sample.text);
-    const analysis = analyzeMessage(sample.type, sample.text);
-    setResult(analysis);
-    addAnalysis(analysis);
+  const handleAnalyze = () => {
+    runAnalysis(messageType, text);
+  };
+
+  const handleSample = (example: ExampleMessage) => {
+    setMessageType(example.type);
+    setText(example.text);
+    runAnalysis(example.type, example.text);
   };
 
   const resetForm = () => {
@@ -57,16 +44,29 @@ export default function AnalyzePage() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-3xl bg-white p-6 shadow-soft">
-        <p className="font-bold text-tealguard">Scam Analyzer</p>
-        <h1 className="mt-2 text-3xl font-black text-ink sm:text-4xl">Analyze suspicious message</h1>
-        <p className="mt-3 max-w-3xl text-slate-600">
-          Paste an SMS, email, phone script, bank alert, delivery message, BLIK request or investment offer. The local
-          rule engine explains the risk in simple language.
-        </p>
+      <section className="overflow-hidden rounded-3xl bg-ink p-6 text-white shadow-soft">
+        <div className="grid gap-6 lg:grid-cols-[1fr_320px] lg:items-center">
+          <div>
+            <p className="font-bold text-cyan-200">Scam Analyzer</p>
+            <h1 className="mt-2 text-3xl font-black sm:text-4xl">Analyze suspicious message</h1>
+            <p className="mt-3 max-w-3xl text-cyan-50">
+              Paste an SMS, email, phone call script, bank alert, delivery message, BLIK request or investment offer.
+              The local rule engine explains the risk without sending content to an external AI service.
+            </p>
+          </div>
+          <div className="rounded-3xl border border-white/15 bg-white/10 p-5">
+            <div className="flex items-center gap-3">
+              <ShieldCheck aria-hidden="true" className="text-cyan-200" size={26} />
+              <p className="font-black">Privacy-first analysis</p>
+            </div>
+            <p className="mt-3 text-sm leading-6 text-cyan-50">
+              Analysis runs in the browser. Avoid entering real passwords, card numbers or PESEL.
+            </p>
+          </div>
+        </div>
       </section>
 
-      <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+      <div className="grid gap-6 xl:grid-cols-[0.92fr_1.08fr]">
         <section className="rounded-3xl border border-teal-100 bg-white p-6 shadow-soft">
           <div className="space-y-5">
             <div>
@@ -89,16 +89,19 @@ export default function AnalyzePage() {
 
             <div>
               <label htmlFor="message-text" className="block text-sm font-black text-ink">
-                Suspicious text
+                Suspicious content
               </label>
               <textarea
                 id="message-text"
                 value={text}
                 onChange={(event) => setText(event.target.value)}
-                rows={11}
-                placeholder="Wklej tutaj podejrzaną wiadomość, e-mail albo opisz rozmowę telefoniczną..."
+                rows={12}
+                placeholder="Paste a suspicious SMS, email, link or describe a phone call..."
                 className="mt-2 w-full resize-y rounded-3xl border border-slate-200 bg-white px-4 py-4 text-ink shadow-sm focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
               />
+              <p className="mt-2 text-sm leading-6 text-slate-500">
+                Tip: do not paste real passwords, full card numbers or PESEL. A short preview is enough.
+              </p>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2">
@@ -122,18 +125,10 @@ export default function AnalyzePage() {
           </div>
 
           <div className="mt-7 border-t border-slate-100 pt-5">
-            <h2 className="text-lg font-black text-ink">Try example cases</h2>
+            <h2 className="text-lg font-black text-ink">Load realistic examples</h2>
             <div className="mt-3 flex flex-wrap gap-2">
-              {sampleMessages.map((sample) => (
-                <button
-                  key={sample.label}
-                  type="button"
-                  onClick={() => handleSample(sample)}
-                  className="inline-flex min-h-11 items-center gap-2 rounded-full border border-teal-100 px-4 py-2 text-sm font-bold text-tealguard transition hover:bg-teal-50 focus:outline-none focus:ring-4 focus:ring-teal-200"
-                >
-                  <ClipboardPaste aria-hidden="true" size={17} />
-                  {sample.label}
-                </button>
+              {exampleMessages.map((example) => (
+                <ExampleMessageButton key={example.label} example={example} onLoad={handleSample} />
               ))}
             </div>
           </div>
@@ -143,15 +138,21 @@ export default function AnalyzePage() {
           <AnalysisResult result={result} />
         ) : (
           <section className="rounded-3xl border border-dashed border-teal-200 bg-white p-8 shadow-soft">
-            <div className="flex h-full min-h-[360px] flex-col justify-center">
+            <div className="flex h-full min-h-[420px] flex-col justify-center">
               <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-50 text-tealguard">
                 <SearchCheck aria-hidden="true" size={28} />
               </span>
-              <h2 className="mt-5 text-2xl font-black text-ink">Your analysis will appear here</h2>
+              <h2 className="mt-5 text-2xl font-black text-ink">Your explainable analysis will appear here</h2>
               <p className="mt-3 max-w-xl leading-7 text-slate-600">
-                The result includes risk score, detected warning signs, a plain-language explanation and recommended
-                actions. Analyses are saved only in this browser.
+                You will see a risk score, risk level, detected indicators, point-by-point scoring, recommended actions,
+                copy buttons and an optional PDF report.
               </p>
+              <Link
+                href="/privacy-security"
+                className="mt-6 inline-flex min-h-12 w-fit items-center rounded-2xl border border-teal-100 px-5 py-3 font-bold text-tealguard hover:bg-teal-50 focus:outline-none focus:ring-4 focus:ring-teal-200"
+              >
+                How privacy works
+              </Link>
             </div>
           </section>
         )}

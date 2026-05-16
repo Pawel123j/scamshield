@@ -8,13 +8,16 @@ export type MessageType =
   | "Investment offer"
   | "Other";
 
-export type RiskLevel = "Low" | "Medium" | "High";
+export type RiskLevel = "low" | "medium" | "high";
 
 export interface RiskIndicator {
   id: string;
-  title: string;
+  label: string;
   description: string;
-  category:
+  points: number;
+  severity: RiskLevel;
+  matchedTerms?: string[];
+  category?:
     | "link"
     | "data"
     | "payment"
@@ -28,22 +31,25 @@ export interface RiskIndicator {
     | "sender"
     | "secrecy"
     | "remote-access";
-  severity: RiskLevel;
-  weight: number;
-  matchedTerms: string[];
+}
+
+export interface ScoringBreakdownItem {
+  label: string;
+  points: number;
 }
 
 export interface AnalysisResult {
   id: string;
+  createdAt: string;
   messageType: MessageType;
-  inputText: string;
+  originalText: string;
+  preview: string;
   score: number;
   level: RiskLevel;
   summary: string;
-  explanation: string;
-  detectedIndicators: RiskIndicator[];
-  recommendedActions: string[];
-  createdAt: string;
+  indicators: RiskIndicator[];
+  recommendations: string[];
+  scoringBreakdown: ScoringBreakdownItem[];
 }
 
 export interface ScamExample {
