@@ -2,12 +2,15 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: ["**"]
   pull_request:
-    branches: [main]
+
+permissions:
+  contents: read
 
 jobs:
   build-and-test:
+    name: Lint, typecheck, testy, build
     runs-on: ubuntu-latest
 
     steps:
@@ -18,6 +21,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
@@ -25,8 +29,20 @@ jobs:
       - name: Run lint
         run: npm run lint
 
+      - name: Typecheck
+        # `next build` sprawdza typy tylko w plikach, które wciągnie do
+        # bundla — testy i pliki pomocnicze zostają poza kontrolą. Osobny
+        # `tsc --noEmit` obejmuje cały projekt.
+        run: npm run typecheck
+
       - name: Run tests
         run: npm run test:run
+
+      - name: Audyt zależności
+        # W dniu commita `npm audit` zwraca tutaj zero podatności. Blokujemy
+        # na `high`, żeby nowy komunikat o podatności o niskiej wadze nie
+        # zapalał CI na czerwono na commicie, którego nikt nie dotykał.
+        run: npm audit --audit-level=high
 
       - name: Build project
         run: npm run build
