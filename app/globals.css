@@ -75,6 +75,27 @@ select {
   color: #243b3a;
 }
 
+/*
+ * Tryb senioralny ma PODNOSIĆ kontrast, a powyższa reguła robiła odwrotnie na
+ * ciemnych sekcjach: nagłówki stron i karty na `bg-ink` mają jasny tekst, więc
+ * wymuszenie ciemnego grafitu dawało tam szary napis na czarnym tle —
+ * praktycznie niewidoczny. Reguła z wyższą specyficznością przywraca tym
+ * miejscom kolor odziedziczony z kontenera.
+ *
+ * `.senior-mode` i `.text-cyan-50` mają tę samą specyficzność (0,1,0),
+ * a `:where()` nie dodaje nic — o wyniku decydowała więc kolejność
+ * w arkuszu, co jest dokładnie tym rodzajem zależności, którego nie widać
+ * przy czytaniu komponentu.
+ */
+.senior-mode :where(.bg-ink, .hero-scene, .text-white) :where(p, li) {
+  color: inherit;
+}
+
+/* Ten sam problem w trybie ciemnym: tło jest granatowe, tekst jasny. */
+.senior-mode.dark-mode :where(p, li) {
+  color: #e2e8f0;
+}
+
 .dark-mode {
   background: #020617;
   color: #e2e8f0;
@@ -84,7 +105,14 @@ select {
   border-color: rgba(34, 211, 238, 0.22);
 }
 
-.dark-mode :where(.bg-mist) {
+/*
+ * Pasek boczny używa `bg-mist/80`, a nie `bg-mist` — a to w CSS-ie jest
+ * osobna klasa (`.bg-mist\/80`). Reguła trybu ciemnego obejmowała tylko wariant
+ * bez przezroczystości, więc pasek zostawał jasny, podczas gdy reguła niżej
+ * rozjaśniała w nim tekst do #cbd5e1. Efekt: jasnoszare napisy na jasnym tle,
+ * czyli nawigacja, której w trybie ciemnym praktycznie nie było widać.
+ */
+.dark-mode :where(.bg-mist, .bg-mist\/80) {
   background-color: #020617;
 }
 

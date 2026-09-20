@@ -1,4 +1,11 @@
-import type { AnalysisResult, ConfidenceLevel, RiskLevel, ScamCategory } from "@/lib/types";
+import { maskSensitiveNumbers } from "@/lib/scamAnalyzer";
+import type {
+  AnalysisResult,
+  ConfidenceLevel,
+  RiskLevel,
+  ScamCategory,
+  ScoringBreakdownItem
+} from "@/lib/types";
 
 export const storageKeys = {
   analysisHistory: "scamshield.analysisHistory",
@@ -70,6 +77,48 @@ export function readAnalysisHistory(): AnalysisResult[] {
 
 export function saveAnalysisHistory(history: AnalysisResult[]) {
   setLocalStorageItem(storageKeys.analysisHistory, history.slice(0, 75));
+}
+
+/**
+ * Podgląd zapisu historii nigdy nie może pokazać pełnego numeru karty ani
+ * PESEL-u — te tabele są widoczne na ekranie i trafiają do eksportu PDF.
+ *
+ * Dotyczy to także zapisów ze starszych wersji aplikacji, które trzymały
+ * wyłącznie `originalText`. Wcześniej fallback brał surowy tekst i podawał
+ * go dalej jako `maskedPreview`, czyli pole, którego cała nazwa obiecuje coś
+ * przeciwnego.
+ */
+function buildPreviewFallback(originalText: string) {
+  const masked = maskSensitiveNumbers(originalText);
+  return masked.length > 140 ? `${masked.slice(0, 137)}...` : masked;
+}
+
+/**
+ * `scoringBreakdown` jest renderowany jako tabela punktów. Zapis z localStorage
+ * to dane spoza aplikacji (użytkownik może je edytować w narzędziach
+ * deweloperskich), więc nie wystarczy rzutowanie typu — pozycje bez etykiety
+ * albo z nieliczbową wartością trzeba odrzucić, zanim trafią do widoku.
+ */
+function normalizeScoringBreakdown(value: unknown, score: number): ScoringBreakdownItem[] {
+  if (!Array.isArray(value)) {
+    return [{ label: "Legacy saved score", points: score }];
+  }
+
+  const items = value
+    .filter((item): item is Record<string, unknown> => Boolean(item && typeof item === "object"))
+    .map((item) => ({
+      label: String(item.label ?? "Saved score component"),
+      // Samo Number() nie wystarcza: Number(null), Number("") i Number(false)
+      // dają 0, czyli wartość skończoną — zepsuta pozycja przeszłaby dalej
+      // jako "0 punktów" zamiast zostać odrzucona.
+      points:
+        typeof item.points === "number" || (typeof item.points === "string" && item.points.trim() !== "")
+          ? Number(item.points)
+          : Number.NaN
+    }))
+    .filter((item) => Number.isFinite(item.points));
+
+  return items.length > 0 ? items : [{ label: "Legacy saved score", points: score }];
 }
 
 function normalizeLevel(level: unknown): RiskLevel {
@@ -152,8 +201,8 @@ function normalizeAnalysisItem(item: Record<string, unknown>): AnalysisResult | 
     createdAt: String(item.createdAt),
     messageType: item.messageType as AnalysisResult["messageType"],
     originalText,
-    preview: String(item.preview ?? (originalText.length > 140 ? `${originalText.slice(0, 137)}...` : originalText)),
-    maskedPreview: String(item.maskedPreview ?? item.preview ?? (originalText.length > 140 ? `${originalText.slice(0, 137)}...` : originalText)),
+    preview: String(item.preview ?? buildPreviewFallback(originalText)),
+    maskedPreview: String(item.maskedPreview ?? item.preview ?? buildPreviewFallback(originalText)),
     score,
     level: normalizeLevel(item.level),
     dominantCategory: normalizeCategory(item.dominantCategory),
@@ -166,9 +215,7 @@ function normalizeAnalysisItem(item: Record<string, unknown>): AnalysisResult | 
     nextSteps: Array.isArray(item.nextSteps)
       ? item.nextSteps.map((step) => String(step))
       : recommendations.map((recommendation) => String(recommendation)),
-    scoringBreakdown: Array.isArray(item.scoringBreakdown)
-      ? (item.scoringBreakdown as AnalysisResult["scoringBreakdown"])
-      : [{ label: "Legacy saved score", points: score }],
+    scoringBreakdown: normalizeScoringBreakdown(item.scoringBreakdown, score),
     wasTruncated: Boolean(item.wasTruncated)
   };
 }
