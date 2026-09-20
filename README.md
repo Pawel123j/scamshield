@@ -8,7 +8,10 @@
 
 ScamShield Senior is a privacy-first cybersecurity awareness web app that helps seniors and families detect phishing, scam messages, fake bank alerts, BLIK fraud, delivery scams and social engineering attempts using an explainable rule-based risk analysis engine.
 
-Live demo: _Add deployment link here._
+Aplikacja nie ma jeszcze publicznego wdrożenia — zamiast linku-zaślepki
+poniżej jest komplet zrzutów ekranu z działającej aplikacji oraz gotowa
+konfiguracja wdrożenia (`vercel.json`). Jak postawić ją u siebie w kilka
+minut, opisuje sekcja [Deployment](#deployment).
 
 ## Screenshots
 
@@ -35,6 +38,15 @@ Live demo: _Add deployment link here._
 
 ### Dark Mode
 ![Dark Mode](public/screenshots/dark-mode.png)
+
+### Widok mobilny
+![Mobile landing](public/screenshots/mobile-landing.png)
+![Mobile analyzer](public/screenshots/mobile-analyzer.png)
+
+> Wszystkie zrzuty pochodzą z produkcyjnego builda (`npm run build` +
+> `next start`) i zostały zrobione automatycznie przeglądarką sterowaną
+> skryptem. Nic tu nie jest makietą ani wizualizacją — to stan aplikacji
+> z tego commita.
 
 ## Features
 
@@ -133,12 +145,53 @@ npm run dev
 Quality checks:
 
 ```bash
-npm run lint
-npm test
-npm run test:run
-npm run build
-npm audit
+npm run lint        # ESLint
+npm run typecheck   # tsc --noEmit na całym projekcie, także na testach
+npm run test:run    # 37 testów jednostkowych
+npm run build       # build produkcyjny
+npm audit           # 0 podatności na dzień commita
 ```
+
+Dokładnie te same polecenia uruchamia CI — lokalnie i na GitHubie nie ma
+różnicy w tym, co jest sprawdzane.
+
+## Deployment
+
+Aplikacja jest w całości statyczna — `next build` prerenderuje wszystkie 15
+tras, nie ma backendu, bazy ani zmiennych środowiskowych do ustawienia.
+Wdrożenie sprowadza się więc do podpięcia repozytorium.
+
+### Vercel
+
+W repozytorium jest `vercel.json` z komendami budowania i nagłówkami
+bezpieczeństwa (`X-Content-Type-Options`, `X-Frame-Options`,
+`Referrer-Policy`, `Permissions-Policy`). Wystarczy zaimportować
+repozytorium na vercel.com — framework zostanie wykryty jako Next.js,
+a reszta przyjdzie z pliku.
+
+```bash
+npx vercel --prod
+```
+
+### Netlify
+
+Netlify obsługuje Next.js przez oficjalny plugin. Ustawienia:
+
+| Pole | Wartość |
+|---|---|
+| Build command | `npm run build` |
+| Publish directory | `.next` |
+| Node version | `20` |
+
+Nagłówki bezpieczeństwa trzeba wtedy przenieść z `vercel.json` do
+`netlify.toml` — nie ma wspólnego formatu dla obu platform.
+
+### Czego NIE trzeba ustawiać
+
+Żadnych kluczy API, żadnego `.env`, żadnej bazy. Analizator działa
+w przeglądarce na lokalnych regułach, a historia siedzi w LocalStorage —
+to jest ta sama decyzja projektowa, która stoi za sekcją
+"Privacy-First Approach" wyżej.
 
 ## Project Structure
 
@@ -232,3 +285,7 @@ The application includes a rule-based risk analysis engine that calculates a ris
 ## Disclaimer
 
 This tool helps identify suspicious messages, but it does not replace official bank, police or cybersecurity support. When in doubt, contact your bank using the official phone number or report the incident to appropriate authorities.
+
+## Licencja
+
+MIT — patrz [LICENSE](LICENSE).
