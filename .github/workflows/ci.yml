@@ -39,10 +39,10 @@ jobs:
         run: npm run test:run
 
       - name: Audyt zależności
-        # W dniu commita `npm audit` zwraca tutaj zero podatności. Blokujemy
+        # Verify the versioned parser patch and fail on all other high/critical findings.
         # na `high`, żeby nowy komunikat o podatności o niskiej wadze nie
         # zapalał CI na czerwono na commicie, którego nikt nie dotykał.
-        run: npm audit --audit-level=high
+        run: npm run security:check
 
       - name: Build project
         run: npm run build

@@ -289,3 +289,24 @@ This tool helps identify suspicious messages, but it does not replace official b
 ## Licencja
 
 MIT — patrz [LICENSE](LICENSE).
+
+## Weryfikacja środowiska — 2026-10-17
+
+Naprawiono poziome rozszerzanie strony przez tabelę historii na ekranie 390 px. Lint, typy, 37 testów i produkcyjny build przechodzą. `e2e/` uruchamia prawdziwy serwer Next.js i sprawdza analizę wiadomości wysokiego ryzyka, historię po reload oraz brak poziomego overflow. Workflow: `.github/workflows/browser.yml`.
+
+Zaktualizowano Next.js do wersji z lockfile 15.5.28 oraz dostępne poprawki zależności. Audyt npm nadal zgłasza zależności narzędziowe Tailwind/ESLint. Analiza jest heurystyczną pomocą edukacyjną; nie potwierdzono skuteczności na rzeczywistym zbiorze oszustw. Dane w localStorage nie są zaszyfrowanym sejfem. Produkcyjne wdrożenie i bezpieczeństwo hostingu pozostają do sprawdzenia.
+
+
+### Testy przeglądarkowe
+
+Po zainstalowaniu zależności aplikacji i zbudowaniu frontendu zgodnie z README / workflow `browser.yml` (lub jobem browser w `ci.yml`):
+
+```bash
+python -m venv .venv-e2e
+# Aktywuj ten venv przed dalszymi poleceniami.
+python -m pip install -r e2e/requirements.txt
+python -m playwright install chromium
+python -m pytest -q e2e
+```
+
+Na Linux może być potrzebne `python -m playwright install --with-deps chromium` z uprawnieniami administratora. Alternatywnie `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` wskazuje istniejący Chromium. Testy uruchamiają i zatrzymują własny serwer, używają nowego kontekstu przeglądarki i zapisują logi w ignorowanym `e2e/artifacts/`. Pełny backend musi mieć zainstalowane swoje zależności; `E2E_API_PYTHON` jest opcjonalnym wyborem jego interpretera w AutoDesk/BankGuard. Testy nie uruchamiają wdrożenia.

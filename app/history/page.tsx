@@ -77,7 +77,7 @@ export default function HistoryPage() {
         />
       ) : (
         <div className="grid gap-6 xl:grid-cols-[1fr_0.95fr]">
-          <section className="rounded-3xl border border-teal-100 bg-white p-6 shadow-soft">
+          <section className="min-w-0 rounded-3xl border border-teal-100 bg-white p-6 shadow-soft">
             <div className="mb-5 flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-2 pr-2 text-sm font-black text-ink">
                 <Filter aria-hidden="true" size={18} />
