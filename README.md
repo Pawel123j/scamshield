@@ -137,8 +137,10 @@ http://localhost:3000
 
 ## Run Locally with npm
 
+Use Node.js 24, matching CI and the Docker image. Install the locked dependencies:
+
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
@@ -149,7 +151,7 @@ npm run lint        # ESLint
 npm run typecheck   # tsc --noEmit na całym projekcie, także na testach
 npm run test:run    # 37 testów jednostkowych
 npm run build       # build produkcyjny
-npm audit           # 0 podatności na dzień commita
+npm run security:check # aktualne advisory i kontrola wersjonowanej poprawki
 ```
 
 Dokładnie te same polecenia uruchamia CI — lokalnie i na GitHubie nie ma
@@ -181,7 +183,7 @@ Netlify obsługuje Next.js przez oficjalny plugin. Ustawienia:
 |---|---|
 | Build command | `npm run build` |
 | Publish directory | `.next` |
-| Node version | `20` |
+| Node version | `24` |
 
 Nagłówki bezpieczeństwa trzeba wtedy przenieść z `vercel.json` do
 `netlify.toml` — nie ma wspólnego formatu dla obu platform.
