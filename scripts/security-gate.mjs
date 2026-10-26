@@ -49,6 +49,9 @@ function verifyPatchedBraces(node) {
   assert.ok(braces.compile('{a,b}'.repeat(1000)));
   checked.add(node);
 }
+// The committed patch remains part of this installation even if an advisory
+// feed temporarily stops reporting braces. Verify it before claiming success.
+verifyPatchedBraces('node_modules/braces');
 const failures = [];
 for (const vulnerability of Object.values(report.vulnerabilities)) {
   for (const advisory of vulnerability.via) {
