@@ -1,3 +1,4 @@
+import { categoryLabels } from "@/lib/labels";
 import { getRiskLevel } from "@/lib/risk";
 import type {
   AnalysisResult,
@@ -24,8 +25,8 @@ type RuleDefinition = {
 const rules: RuleDefinition[] = [
   {
     id: "suspicious-link",
-    label: "Suspicious link detected",
-    description: "The message contains a link. Scam messages often use links to fake bank, delivery or payment pages.",
+    label: "Wiadomość zawiera link",
+    description: "Link może prowadzić do fałszywej strony banku, kuriera lub płatności. Sam link nie dowodzi oszustwa.",
     points: 18,
     severity: "medium",
     category: "phishing",
@@ -33,8 +34,8 @@ const rules: RuleDefinition[] = [
   },
   {
     id: "shortened-link",
-    label: "Shortened URL",
-    description: "Short links hide the real destination, which makes verification harder.",
+    label: "Skrócony link",
+    description: "Skrócony link ukrywa adres docelowy i utrudnia jego sprawdzenie.",
     points: 22,
     severity: "high",
     category: "phishing",
@@ -42,8 +43,8 @@ const rules: RuleDefinition[] = [
   },
   {
     id: "fake-bank-wording",
-    label: "Fake bank wording",
-    description: "The text uses banking language and should be verified only through official bank contact details.",
+    label: "Treść związana z bankiem",
+    description: "Wiadomość dotyczy bankowości. Sprawdź ją przez oficjalną aplikację lub numer banku.",
     points: 18,
     severity: "medium",
     category: "banking_fraud",
@@ -54,8 +55,8 @@ const rules: RuleDefinition[] = [
   },
   {
     id: "delivery-scam-wording",
-    label: "Delivery payment wording",
-    description: "Small delivery fees are often used to lure people onto fake payment pages.",
+    label: "Treść związana z przesyłką lub dopłatą",
+    description: "Niewielkie dopłaty do przesyłki bywają pretekstem do przekierowania na fałszywą stronę płatności.",
     points: 24,
     severity: "high",
     category: "delivery_scam",
@@ -66,8 +67,8 @@ const rules: RuleDefinition[] = [
   },
   {
     id: "blik-request",
-    label: "BLIK code request",
-    description: "A BLIK code can move money immediately. Never share it in a message or call.",
+    label: "Wzmianka o BLIK lub prośba o kod",
+    description: "Kod BLIK może umożliwić natychmiastową wypłatę pieniędzy. Nie podawaj go w wiadomości ani podczas rozmowy.",
     points: 34,
     severity: "high",
     category: "blik_fraud",
@@ -75,8 +76,8 @@ const rules: RuleDefinition[] = [
   },
   {
     id: "card-data-request",
-    label: "Card details request",
-    description: "Legitimate institutions do not ask for full card data, CVV/CVC or expiry date through a message link.",
+    label: "Prośba o dane karty",
+    description: "Nie przekazuj pełnych danych karty, CVV/CVC ani daty ważności przez link otrzymany w wiadomości.",
     points: 25,
     severity: "high",
     category: "identity_theft",
@@ -84,8 +85,8 @@ const rules: RuleDefinition[] = [
   },
   {
     id: "personal-data-request",
-    label: "Sensitive personal data request",
-    description: "PESEL, ID number, login, password and PIN are sensitive and should not be shared with a sender.",
+    label: "Wzmianka o poufnych danych",
+    description: "PESEL, numer dowodu, login, hasło i PIN to dane poufne. Nie przekazuj ich nadawcy.",
     points: 26,
     severity: "high",
     category: "identity_theft",
@@ -96,8 +97,8 @@ const rules: RuleDefinition[] = [
   },
   {
     id: "urgency-pressure",
-    label: "Urgency or time pressure",
-    description: "Scammers create pressure so the victim acts before checking the story calmly.",
+    label: "Presja czasu",
+    description: "Oszuści wywierają presję, aby skłonić do działania bez spokojnego sprawdzenia sytuacji.",
     points: 15,
     severity: "medium",
     category: "social_engineering",
@@ -105,8 +106,8 @@ const rules: RuleDefinition[] = [
   },
   {
     id: "threats",
-    label: "Threats or consequences",
-    description: "Threats about blocked accounts, debt, court, police or prosecution are common manipulation tactics.",
+    label: "Groźby lub konsekwencje",
+    description: "Groźby blokady konta, długu, sądu lub policji mogą służyć manipulacji.",
     points: 22,
     severity: "high",
     category: "social_engineering",
@@ -117,8 +118,8 @@ const rules: RuleDefinition[] = [
   },
   {
     id: "investment-promise",
-    label: "Investment profit promise",
-    description: "Guaranteed or unusually fast investment returns are a strong scam warning sign.",
+    label: "Obietnica zysku z inwestycji",
+    description: "Gwarantowany lub bardzo szybki zysk jest silnym sygnałem ostrzegawczym.",
     points: 24,
     severity: "high",
     category: "investment_scam",
@@ -129,8 +130,8 @@ const rules: RuleDefinition[] = [
   },
   {
     id: "crypto-scam",
-    label: "Cryptocurrency scam wording",
-    description: "Crypto profit promises and withdrawal fees are common in fake investment platforms.",
+    label: "Treść związana z kryptowalutami",
+    description: "Obietnice zysku i opłaty za wypłatę środków często występują na fałszywych platformach inwestycyjnych.",
     points: 18,
     severity: "high",
     category: "crypto_scam",
@@ -138,8 +139,8 @@ const rules: RuleDefinition[] = [
   },
   {
     id: "too-good-to-be-true",
-    label: "Too-good-to-be-true offer",
-    description: "Very high rewards, guaranteed returns or prizes are designed to lower caution.",
+    label: "Nierealistyczna oferta",
+    description: "Wysokie nagrody, pewny zysk i prezenty mogą mieć na celu uśpienie czujności.",
     points: 16,
     severity: "medium",
     category: "social_engineering",
@@ -147,8 +148,8 @@ const rules: RuleDefinition[] = [
   },
   {
     id: "unknown-sender",
-    label: "Unknown sender or new number",
-    description: "Unknown numbers and sudden new-number stories often appear in family impersonation scams.",
+    label: "Nieznany nadawca lub nowy numer",
+    description: "Historia o nowym numerze telefonu może być próbą podszycia się pod kogoś z rodziny.",
     points: 12,
     severity: "medium",
     category: "social_engineering",
@@ -156,8 +157,8 @@ const rules: RuleDefinition[] = [
   },
   {
     id: "secrecy",
-    label: "Secrecy request",
-    description: "A request to keep the situation secret can isolate the victim from family or bank support.",
+    label: "Prośba o zachowanie tajemnicy",
+    description: "Prośba o tajemnicę może odciąć od pomocy rodziny lub banku.",
     points: 22,
     severity: "high",
     category: "social_engineering",
@@ -165,8 +166,8 @@ const rules: RuleDefinition[] = [
   },
   {
     id: "remote-access",
-    label: "Remote access tool request",
-    description: "AnyDesk, TeamViewer and remote desktop tools can give a criminal control over the device.",
+    label: "Prośba o zdalny dostęp",
+    description: "AnyDesk, TeamViewer i zdalny pulpit mogą dać przestępcy kontrolę nad urządzeniem.",
     points: 32,
     severity: "high",
     category: "remote_access_scam",
@@ -177,8 +178,8 @@ const rules: RuleDefinition[] = [
   },
   {
     id: "click-or-confirm",
-    label: "Instruction to click or confirm",
-    description: "Scam messages often use simple commands such as click, confirm, sign in or provide a code.",
+    label: "Polecenie kliknięcia lub potwierdzenia",
+    description: "Polecenie kliknięcia, potwierdzenia, logowania lub podania kodu wymaga sprawdzenia nadawcy.",
     points: 15,
     severity: "medium",
     category: "phishing",
@@ -187,11 +188,11 @@ const rules: RuleDefinition[] = [
 ];
 
 const typeRiskBoost: Partial<Record<MessageType, { label: string; category: ScamCategory; ruleIds: string[]; points: number }>> = {
-  "BLIK request": { label: "BLIK request context", category: "blik_fraud", ruleIds: ["blik-request", "unknown-sender", "secrecy"], points: 12 },
-  "Delivery message": { label: "Delivery message context", category: "delivery_scam", ruleIds: ["delivery-scam-wording", "suspicious-link", "shortened-link", "card-data-request"], points: 15 },
-  "Bank message": { label: "Bank message context", category: "banking_fraud", ruleIds: ["fake-bank-wording", "personal-data-request", "threats", "suspicious-link"], points: 10 },
-  "Investment offer": { label: "Investment offer context", category: "investment_scam", ruleIds: ["investment-promise", "crypto-scam", "too-good-to-be-true", "remote-access"], points: 12 },
-  "Phone call": { label: "Phone call social-engineering context", category: "social_engineering", ruleIds: ["remote-access", "fake-bank-wording", "unknown-sender", "secrecy"], points: 8 }
+  "BLIK request": { label: "Kontekst prośby o BLIK", category: "blik_fraud", ruleIds: ["blik-request", "unknown-sender", "secrecy"], points: 12 },
+  "Delivery message": { label: "Kontekst przesyłki", category: "delivery_scam", ruleIds: ["delivery-scam-wording", "suspicious-link", "shortened-link", "card-data-request"], points: 15 },
+  "Bank message": { label: "Kontekst bankowy", category: "banking_fraud", ruleIds: ["fake-bank-wording", "personal-data-request", "threats", "suspicious-link"], points: 10 },
+  "Investment offer": { label: "Kontekst inwestycji", category: "investment_scam", ruleIds: ["investment-promise", "crypto-scam", "too-good-to-be-true", "remote-access"], points: 12 },
+  "Phone call": { label: "Kontekst rozmowy telefonicznej", category: "social_engineering", ruleIds: ["remote-access", "fake-bank-wording", "unknown-sender", "secrecy"], points: 8 }
 };
 
 export const messageTypes: MessageType[] = [
@@ -267,8 +268,8 @@ function detectSuspiciousFormatting(text: string): RiskIndicator | null {
 
   return {
     id: "suspicious-formatting",
-    label: "Suspicious formatting",
-    description: "Chaotic punctuation, very long strings, all-caps text or phone-like number blocks can indicate a mass scam message.",
+    label: "Nietypowy zapis wiadomości",
+    description: "Wiele wykrzykników, długie ciągi znaków, wielkie litery lub numery mogą występować w masowych wiadomościach.",
     points: 10,
     severity: "medium",
     category: "phishing",
@@ -308,35 +309,35 @@ function buildRecommendations(indicators: RiskIndicator[]): string[] {
   const recommendations = new Set<string>();
 
   if (categories.has("phishing")) {
-    recommendations.add("Do not click links from the message. Type the official website address manually.");
+    recommendations.add("Nie klikaj linków w wiadomości. Wpisz oficjalny adres strony samodzielnie.");
   }
 
   if (categories.has("identity_theft") || categories.has("blik_fraud")) {
-    recommendations.add("Do not provide card details, BLIK codes, PESEL, login, password or authorization codes.");
+    recommendations.add("Nie podawaj danych karty, BLIK, PESEL, loginu, hasła ani kodów autoryzacji.");
   }
 
   if (categories.has("banking_fraud")) {
-    recommendations.add("Contact the bank using the official phone number from your card, banking app or bank website.");
+    recommendations.add("Zadzwoń do banku pod oficjalny numer z karty, aplikacji lub strony banku.");
   }
 
   if (categories.has("delivery_scam")) {
-    recommendations.add("Check delivery status in the official courier app or by typing the courier address yourself.");
+    recommendations.add("Sprawdź przesyłkę w oficjalnej aplikacji kuriera lub wpisz jego adres samodzielnie.");
   }
 
   if (categories.has("investment_scam") || categories.has("crypto_scam")) {
-    recommendations.add("Do not send money or install investment apps recommended by an unknown consultant.");
+    recommendations.add("Nie przelewaj pieniędzy i nie instaluj aplikacji poleconych przez nieznanego doradcę.");
   }
 
   if (categories.has("remote_access_scam")) {
-    recommendations.add("Do not install AnyDesk, TeamViewer or any remote access tool for an unknown caller.");
+    recommendations.add("Nie instaluj AnyDesk, TeamViewer ani innego narzędzia zdalnego dostępu na prośbę nieznanej osoby.");
   }
 
   if (categories.has("social_engineering")) {
-    recommendations.add("Pause the conversation and ask a trusted family member for a second opinion.");
+    recommendations.add("Przerwij rozmowę i poproś zaufaną osobę o pomoc w ocenie sytuacji.");
   }
 
-  recommendations.add("Save a screenshot or copy of the message if you need to report the incident.");
-  recommendations.add("When in doubt, contact your bank, police or the relevant organization through official channels.");
+  recommendations.add("Zachowaj zrzut ekranu lub kopię wiadomości do ewentualnego zgłoszenia.");
+  recommendations.add("W razie wątpliwości skontaktuj się z bankiem, policją lub odpowiednią instytucją oficjalnym kanałem.");
 
   return Array.from(recommendations);
 }
@@ -344,30 +345,30 @@ function buildRecommendations(indicators: RiskIndicator[]): string[] {
 function buildNextSteps(level: RiskLevel): string[] {
   if (level === "high") {
     return [
-      "Do not click links.",
-      "Do not reply.",
-      "Do not provide data.",
-      "Contact your bank using the official phone number if money or banking data is involved.",
-      "Ask a trusted family member for help.",
-      "Report the incident if needed."
+      "Nie klikaj linków.",
+      "Nie odpowiadaj.",
+      "Nie podawaj danych.",
+      "Jeśli sprawa dotyczy pieniędzy lub danych bankowych, zadzwoń do banku pod oficjalny numer.",
+      "Poproś zaufaną osobę z rodziny o pomoc.",
+      "W razie potrzeby zgłoś incydent."
     ];
   }
 
   if (level === "medium") {
     return [
-      "Verify the sender independently.",
-      "Do not use links from the message.",
-      "Search for the official website manually.",
-      "Ask family or support if unsure."
+      "Sprawdź nadawcę niezależnym kanałem.",
+      "Nie korzystaj z linków w wiadomości.",
+      "Samodzielnie znajdź oficjalną stronę.",
+      "W razie wątpliwości poproś rodzinę lub pomoc techniczną."
     ];
   }
 
-  return ["Stay cautious.", "Do not share sensitive data.", "Verify unexpected requests."];
+  return ["Zachowaj ostrożność.", "Nie przekazuj poufnych danych.", "Sprawdzaj nieoczekiwane prośby."];
 }
 
 function buildShortSummary(score: number, indicators: RiskIndicator[]) {
   if (indicators.length === 0) {
-    return "No common scam indicators were detected.";
+    return "Nie wykryto typowych sygnałów oszustwa.";
   }
 
   const topSignals = indicators
@@ -377,15 +378,15 @@ function buildShortSummary(score: number, indicators: RiskIndicator[]) {
     .map((indicator) => indicator.label.toLowerCase());
 
   if (score > 60) {
-    return `High risk: ${topSignals.join(", ")}.`;
+    return `Wysokie ryzyko: ${topSignals.join(", ")}.`;
   }
 
-  return `Caution advised: ${topSignals.join(", ")}.`;
+  return `Zachowaj ostrożność: ${topSignals.join(", ")}.`;
 }
 
-function buildDetailedExplanation(score: number, indicators: RiskIndicator[], dominantCategory: ScamCategory, confidence: ConfidenceLevel) {
+function buildDetailedExplanation(score: number, indicators: RiskIndicator[], dominantCategory: ScamCategory) {
   if (indicators.length === 0) {
-    return "The text does not match the most common scam patterns in this local rule set. This does not guarantee safety, especially if the message asks for money, account access or private data.";
+    return "Tekst nie pasuje do typowych wzorców w tym zestawie reguł. To nie gwarantuje bezpieczeństwa, zwłaszcza gdy ktoś prosi o pieniądze, dostęp do konta lub dane.";
   }
 
   const topSignals = indicators
@@ -395,26 +396,26 @@ function buildDetailedExplanation(score: number, indicators: RiskIndicator[], do
     .map((indicator) => indicator.label.toLowerCase())
     .join(", ");
 
-  return `The analyzer classified the dominant pattern as ${dominantCategory.replace(/_/g, " ")} with ${confidence} confidence. The score is ${score}/100 because the message contains ${topSignals}. Verify through official channels before taking action.`;
+  return `Dominujący wzorzec: ${categoryLabels[dominantCategory]}. Wynik ${score}/100 wynika z sygnałów: ${topSignals}. To punktacja reguł, nie prawdopodobieństwo oszustwa. Sprawdź sprawę oficjalnym kanałem przed działaniem.`;
 }
 
 function addSynergyBreakdown(ruleIds: Set<string>): ScoringBreakdownItem[] {
   const bonuses: ScoringBreakdownItem[] = [];
 
   if (ruleIds.has("suspicious-link") && (ruleIds.has("personal-data-request") || ruleIds.has("card-data-request"))) {
-    bonuses.push({ label: "Link combined with sensitive data request", points: 10 });
+    bonuses.push({ label: "Link i prośba o poufne dane", points: 10 });
   }
 
   if (ruleIds.has("urgency-pressure") && ruleIds.has("threats")) {
-    bonuses.push({ label: "Urgency combined with threats", points: 8 });
+    bonuses.push({ label: "Presja czasu i groźby", points: 8 });
   }
 
   if (ruleIds.has("investment-promise") && ruleIds.has("too-good-to-be-true")) {
-    bonuses.push({ label: "Investment offer combined with too-good-to-be-true promise", points: 8 });
+    bonuses.push({ label: "Inwestycja i nierealistyczna obietnica", points: 8 });
   }
 
   if (ruleIds.has("remote-access") && (ruleIds.has("fake-bank-wording") || ruleIds.has("investment-promise"))) {
-    bonuses.push({ label: "Remote access request in financial context", points: 10 });
+    bonuses.push({ label: "Zdalny dostęp w kontekście finansowym", points: 10 });
   }
 
   return bonuses;
@@ -438,13 +439,13 @@ export function analyzeMessage(messageType: MessageType, rawText: string): Analy
       level: "low",
       dominantCategory: "safe_message",
       confidence: "low",
-      shortSummary: "Paste content to analyze.",
-      detailedExplanation: "The analyzer needs a suspicious message, email or call description before it can calculate risk.",
-      summary: "Paste a suspicious message, e-mail or call description to receive an analysis.",
+      shortSummary: "Wklej treść do sprawdzenia.",
+      detailedExplanation: "Wklej wiadomość lub opis rozmowy, aby obliczyć wynik.",
+      summary: "Wklej podejrzaną wiadomość lub opis rozmowy.",
       indicators: [],
-      recommendations: ["Paste suspicious content and run the analysis again."],
+      recommendations: ["Wklej treść i ponownie uruchom analizę."],
       nextSteps: buildNextSteps("low"),
-      scoringBreakdown: [{ label: "No content to analyze", points: 0 }],
+      scoringBreakdown: [{ label: "Brak treści do analizy", points: 0 }],
       wasTruncated: false
     };
   }
@@ -487,7 +488,7 @@ export function analyzeMessage(messageType: MessageType, rawText: string): Analy
   scoringBreakdown.push(...addSynergyBreakdown(matchedRuleIds));
 
   if (indicators.length === 0) {
-    scoringBreakdown.push({ label: "No major warning signs detected", points: 8 });
+    scoringBreakdown.push({ label: "Nie wykryto głównych sygnałów ostrzegawczych", points: 8 });
   }
 
   const score = Math.max(
@@ -502,7 +503,7 @@ export function analyzeMessage(messageType: MessageType, rawText: string): Analy
   const dominantCategory = contextualBoost && contextualBoostApplied ? contextualBoost.category : getDominantCategory(indicators, fallbackCategory);
   const confidence = getConfidence(score, indicators);
   const shortSummary = buildShortSummary(score, indicators);
-  const detailedExplanation = buildDetailedExplanation(score, indicators, dominantCategory, confidence);
+  const detailedExplanation = buildDetailedExplanation(score, indicators, dominantCategory);
 
   return {
     id: createId(),

@@ -18,7 +18,7 @@ export const storageKeys = {
 } as const;
 
 function canUseStorage() {
-  return typeof window !== "undefined" && typeof window.localStorage !== "undefined";
+  return typeof window !== "undefined";
 }
 
 export function getLocalStorageItem<T>(key: string, fallback: T): T {
@@ -36,13 +36,14 @@ export function getLocalStorageItem<T>(key: string, fallback: T): T {
 
 export function setLocalStorageItem<T>(key: string, value: T) {
   if (!canUseStorage()) {
-    return;
+    return false;
   }
 
   try {
     window.localStorage.setItem(key, JSON.stringify(value));
+    return true;
   } catch {
-    // LocalStorage can fail in private modes or when quota is exceeded.
+    return false;
   }
 }
 
@@ -76,7 +77,7 @@ export function readAnalysisHistory(): AnalysisResult[] {
 }
 
 export function saveAnalysisHistory(history: AnalysisResult[]) {
-  setLocalStorageItem(storageKeys.analysisHistory, history.slice(0, 75));
+  return setLocalStorageItem(storageKeys.analysisHistory, history.slice(0, 75));
 }
 
 /**

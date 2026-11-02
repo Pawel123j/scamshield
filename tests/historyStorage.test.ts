@@ -9,7 +9,7 @@
 
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { readAnalysisHistory, saveAnalysisHistory, storageKeys } from "@/lib/localStorage";
+import { readAnalysisHistory, saveAnalysisHistory, setLocalStorageItem, storageKeys } from "@/lib/localStorage";
 
 /** Minimalny localStorage — testy chodzą w środowisku node, bez przeglądarki. */
 function installFakeStorage() {
@@ -164,5 +164,16 @@ describe("saveAnalysisHistory", () => {
     saveAnalysisHistory(entries as never);
 
     expect(JSON.parse(store.get(storageKeys.analysisHistory)!)).toHaveLength(75);
+  });
+
+  it("handles a localStorage getter that throws in restricted browser modes", () => {
+    const descriptor = Object.getOwnPropertyDescriptor(window, "localStorage");
+    Object.defineProperty(window, "localStorage", { configurable: true, get: () => { throw new DOMException("Blocked", "SecurityError"); } });
+    try {
+      expect(setLocalStorageItem(storageKeys.analysisHistory, [])).toBe(false);
+      expect(readAnalysisHistory()).toEqual([]);
+    } finally {
+      if (descriptor) Object.defineProperty(window, "localStorage", descriptor);
+    }
   });
 });

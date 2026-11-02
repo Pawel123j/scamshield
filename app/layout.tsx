@@ -5,7 +5,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "ScamShield Senior",
-  description: "Senior-friendly anti-scam assistant for checking suspicious messages, calls and phishing attempts.",
+  description: "Pomoc edukacyjna do sprawdzania podejrzanych wiadomości i rozmów. Analiza działa lokalnie w przeglądarce.",
   applicationName: "ScamShield Senior",
   manifest: "/manifest.json",
   appleWebApp: {

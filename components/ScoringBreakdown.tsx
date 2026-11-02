@@ -10,7 +10,7 @@ export function ScoringBreakdown({ items }: ScoringBreakdownProps) {
     <section className="rounded-3xl border border-teal-100 bg-white p-6 shadow-soft">
       <h2 className="flex items-center gap-2 text-xl font-black text-ink">
         <Calculator aria-hidden="true" className="text-tealguard" size={22} />
-        Scoring breakdown
+        Składniki punktacji
       </h2>
       <div className="mt-4 space-y-3">
         {items.map((item, index) => (
