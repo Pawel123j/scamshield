@@ -20,7 +20,7 @@ export function DarkModeToggle({ enabled, onChange }: DarkModeToggleProps) {
       )}
     >
       {enabled ? <Moon aria-hidden="true" size={18} /> : <Sun aria-hidden="true" size={18} />}
-      Dark Mode
+      Ciemny motyw
     </button>
   );
 }

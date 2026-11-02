@@ -13,9 +13,9 @@ export function RiskScoreCard({ score, level }: RiskScoreCardProps) {
     <section className="rounded-3xl border border-teal-100 bg-white p-6 shadow-soft" aria-label="Wynik ryzyka">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-sm font-bold uppercase text-tealguard">Risk score</p>
+          <p className="text-sm font-bold uppercase text-tealguard">Wynik ryzyka</p>
           <p className="mt-2 text-5xl font-black text-ink">{score}/100</p>
-          <p className="mt-1 text-sm font-semibold text-slate-500">Range: {getRiskRange(level)}</p>
+          <p className="mt-1 text-sm font-semibold text-slate-500">Zakres: {getRiskRange(level)}</p>
         </div>
         <RiskBadge level={level} />
       </div>

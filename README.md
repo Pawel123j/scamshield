@@ -1,312 +1,46 @@
 # ScamShield Senior
 
-![Next.js](https://img.shields.io/badge/Next.js-15-black)
-![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38bdf8)
-![Cybersecurity](https://img.shields.io/badge/Focus-Cybersecurity-red)
-![Accessibility](https://img.shields.io/badge/UX-Senior%20Friendly-green)
+ScamShield Senior is an educational assistant for checking suspicious SMS messages, emails, and call descriptions. The analysis uses local rules in the browser; submitted text is not sent to an AI service or remote API.
 
-ScamShield Senior is a privacy-first cybersecurity awareness web app that helps seniors and families detect phishing, scam messages, fake bank alerts, BLIK fraud, delivery scams and social engineering attempts using an explainable rule-based risk analysis engine.
-
-Aplikacja nie ma jeszcze publicznego wdrożenia — zamiast linku-zaślepki
-poniżej jest komplet zrzutów ekranu z działającej aplikacji oraz gotowa
-konfiguracja wdrożenia (`vercel.json`). Jak postawić ją u siebie w kilka
-minut, opisuje sekcja [Deployment](#deployment).
-
-## Screenshots
-
-### Landing Page
-![Landing Page](public/screenshots/landing-page.png)
-
-### Dashboard
-![Dashboard](public/screenshots/dashboard.png)
-
-### Scam Analyzer
-![Scam Analyzer](public/screenshots/analyzer-empty.png)
-
-### Analysis Result
-![Analysis Result](public/screenshots/analyzer-high-risk.png)
-
-### Scam Database
-![Scam Database](public/screenshots/scam-database.png)
-
-### Scenario Simulator
-![Scenario Simulator](public/screenshots/scenario-simulator.png)
-
-### Senior Mode
-![Senior Mode](public/screenshots/senior-mode.png)
-
-### Dark Mode
-![Dark Mode](public/screenshots/dark-mode.png)
-
-### Widok mobilny
-![Mobile landing](public/screenshots/mobile-landing.png)
-![Mobile analyzer](public/screenshots/mobile-analyzer.png)
-
-> Wszystkie zrzuty pochodzą z produkcyjnego builda (`npm run build` +
-> `next start`) i zostały zrobione automatycznie przeglądarką sterowaną
-> skryptem. Nic tu nie jest makietą ani wizualizacją — to stan aplikacji
-> z tego commita.
-
-## Features
-
-- Modern landing page and product-style dashboard
-- Explainable scam analyzer with 0-100 risk score
-- Dominant scam category and confidence level
-- Detected indicators with matched keywords and point values
-- Scoring breakdown and “What should I do now?” action panel
-- Input length limits and sensitive-number masking in previews
-- PDF export and copy-to-clipboard actions
-- Analysis history with risk filters
-- Scam database with search, category filters, risk filters and analyze-example links
-- Cyber lessons with quizzes and LocalStorage progress
-- Safety checklist with persistent progress
-- Family help message generator
-- Trusted contacts stored locally in the browser
-- Incident report guide and copyable incident summary
-- Privacy & Security page
-- Interactive demo route for recruiters
-- Scenario simulator learning game
-- Senior Mode and optional Dark Mode
-- PWA manifest, icons and lightweight service worker
-- Docker development setup
-- GitHub Actions CI
-
-## Tech Stack
-
-- Next.js App Router
-- React
-- TypeScript
-- Tailwind CSS
-- LocalStorage
-- lucide-react
-- jsPDF
-- Vitest
-- Docker
-- GitHub Actions
-
-## Cybersecurity Focus
-
-The analyzer detects patterns connected to:
-
-- phishing links and shortened URLs
-- fake bank messages
-- fake delivery payments
-- BLIK code requests
-- card, PESEL, login and password requests
-- urgency and social engineering pressure
-- police, court, debt and blocked-account threats
-- fake investment and crypto profit promises
-- AnyDesk, TeamViewer and remote access fraud
-- secrecy requests and unknown-sender stories
-
-The score is explainable. The app shows which indicators were found, why they matter, how many points they add and what the user should do next.
-
-## Privacy-First Approach
-
-- No account required
-- No backend in the MVP
-- No paid AI API
-- No message content sent to external analysis services
-- LocalStorage persistence for history, contacts, lessons, checklist and settings
-- Clear warnings not to enter real passwords, full card numbers, PESEL numbers or banking credentials
-- LocalStorage limitations documented in [docs/SECURITY.md](docs/SECURITY.md)
-
-## Accessibility
-
-- Semantic headings and form labels
-- Large click targets
-- Visible focus states
-- Keyboard-friendly controls
-- Risk labels that do not rely only on color
-- Senior Mode for larger text, spacing and contrast
-- Reduced motion support
-- Responsive layouts for mobile and desktop
-
-## Run with Docker
-
-```bash
-docker compose up --build
-```
-
-Open:
-
-```txt
-http://localhost:3000
-```
-
-## Run Locally with npm
+## Run it locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-Quality checks:
+Open the local address printed by Next.js and choose **Analizuj** or open `/analyze`. Paste a message, select its type, and run the check. The result explains matched signals and suggested next steps. You can also try a sample message and review saved results at `/history`.
+
+![ScamShield mobile analyzer with a Polish analysis result](public/screenshots/mobile-analyzer.png)
+
+This screenshot is captured from the production build in Chromium at 390 × 844.
+
+## What the demo does
+
+- Scores a message with a transparent, local rule set and explains the matched indicators.
+- Stores up to 75 analysis results in browser `localStorage`. When storage is blocked or full, the result stays usable in the current tab and the page offers a retry.
+- Registers a service worker in production. Navigation uses the network and falls back to a Polish offline page; the cache contains that fallback plus bounded Next.js static assets, never application HTML. Cache names follow the current app source, old versions are removed during activation, and the user sees a refresh prompt when an update takes control.
+- Keeps the analyzer, result, sample messages, and history in Polish. Some secondary educational pages in the wider demo still contain English copy.
+
+## Checks
 
 ```bash
-npm run lint        # ESLint
-npm run typecheck   # tsc --noEmit na całym projekcie, także na testach
-npm run test:run    # 37 testów jednostkowych
-npm run build       # build produkcyjny
-npm audit           # 0 podatności na dzień commita
+npm run lint
+npm run typecheck
+npm run test:run
+npm run build
 ```
 
-Dokładnie te same polecenia uruchamia CI — lokalnie i na GitHubie nie ma
-różnicy w tym, co jest sprawdzane.
-
-## Deployment
-
-Aplikacja jest w całości statyczna — `next build` prerenderuje wszystkie 15
-tras, nie ma backendu, bazy ani zmiennych środowiskowych do ustawienia.
-Wdrożenie sprowadza się więc do podpięcia repozytorium.
-
-### Vercel
-
-W repozytorium jest `vercel.json` z komendami budowania i nagłówkami
-bezpieczeństwa (`X-Content-Type-Options`, `X-Frame-Options`,
-`Referrer-Policy`, `Permissions-Policy`). Wystarczy zaimportować
-repozytorium na vercel.com — framework zostanie wykryty jako Next.js,
-a reszta przyjdzie z pliku.
-
-```bash
-npx vercel --prod
-```
-
-### Netlify
-
-Netlify obsługuje Next.js przez oficjalny plugin. Ustawienia:
-
-| Pole | Wartość |
-|---|---|
-| Build command | `npm run build` |
-| Publish directory | `.next` |
-| Node version | `20` |
-
-Nagłówki bezpieczeństwa trzeba wtedy przenieść z `vercel.json` do
-`netlify.toml` — nie ma wspólnego formatu dla obu platform.
-
-### Czego NIE trzeba ustawiać
-
-Żadnych kluczy API, żadnego `.env`, żadnej bazy. Analizator działa
-w przeglądarce na lokalnych regułach, a historia siedzi w LocalStorage —
-to jest ta sama decyzja projektowa, która stoi za sekcją
-"Privacy-First Approach" wyżej.
-
-## Project Structure
-
-```txt
-app/
-  analyze/
-  dashboard/
-  demo/
-  family-help/
-  history/
-  privacy-security/
-  report/
-  scenario-simulator/
-  scams/
-  trusted-contacts/
-components/
-data/
-docs/
-hooks/
-lib/
-public/
-tests/
-```
-
-## Architecture Notes
-
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
-
-Key decisions:
-
-- rule-based engine instead of AI API for privacy and explainability
-- LocalStorage instead of backend persistence for the MVP
-- no authentication in the MVP
-- Senior Mode and Dark Mode implemented as global UI settings
-- Docker and GitHub Actions included for professional project hygiene
-
-## Manual Smoke Tests
-
-See [docs/SMOKE_TESTS.md](docs/SMOKE_TESTS.md).
-
-## Screenshot Guide
-
-See [docs/SCREENSHOTS.md](docs/SCREENSHOTS.md).
-
-## Changelog
-
-See [CHANGELOG.md](CHANGELOG.md).
-
-## GitHub Topics
-
-```txt
-cybersecurity
-phishing
-scam-detection
-nextjs
-typescript
-react
-tailwindcss
-security-awareness
-senior-friendly
-accessibility
-social-engineering
-portfolio-project
-pwa
-docker
-```
-
-## Future Improvements
-
-- Real AI/NLP integration for more advanced scam detection
-- Browser extension for checking suspicious websites
-- SMS import and mobile app version
-- Family account system with secure sync
-- Admin panel for managing scam examples
-- Real-time scam alerts
-- CERT Polska / NASK feed integration
-- PDF export improvements
-- Multi-language support
-- Voice assistant mode for seniors
-- Offline PWA improvements
-- Dark mode theme refinements
-- Admin dashboard with scam statistics
-- Report sharing with trusted contacts
-
-## Portfolio Description
-
-ScamShield Senior is a cybersecurity-focused web application created to help seniors and their families recognize phishing, scam messages, fake bank alerts, BLIK fraud, delivery scams and social engineering attempts.
-
-The application includes a rule-based risk analysis engine that calculates a risk score from 0 to 100, detects warning signs, explains threats in simple language and suggests safe next steps. It also contains a scam database, cybersecurity lessons, safety checklist, analysis history, family help message generator, incident reporting guidance, privacy and security page, trusted contacts, scenario simulator, PWA support and a senior-friendly interface mode.
-
-## Disclaimer
-
-This tool helps identify suspicious messages, but it does not replace official bank, police or cybersecurity support. When in doubt, contact your bank using the official phone number or report the incident to appropriate authorities.
-
-## Licencja
-
-MIT — patrz [LICENSE](LICENSE).
-
-## Weryfikacja środowiska — 2026-10-17
-
-Naprawiono poziome rozszerzanie strony przez tabelę historii na ekranie 390 px. Lint, typy, 37 testów i produkcyjny build przechodzą. `e2e/` uruchamia prawdziwy serwer Next.js i sprawdza analizę wiadomości wysokiego ryzyka, historię po reload oraz brak poziomego overflow. Workflow: `.github/workflows/browser.yml`.
-
-Zaktualizowano Next.js do wersji z lockfile 15.5.28 oraz dostępne poprawki zależności. Audyt npm nadal zgłasza zależności narzędziowe Tailwind/ESLint. Analiza jest heurystyczną pomocą edukacyjną; nie potwierdzono skuteczności na rzeczywistym zbiorze oszustw. Dane w localStorage nie są zaszyfrowanym sejfem. Produkcyjne wdrożenie i bezpieczeństwo hostingu pozostają do sprawdzenia.
-
-
-### Testy przeglądarkowe
-
-Po zainstalowaniu zależności aplikacji i zbudowaniu frontendu zgodnie z README / workflow `browser.yml` (lub jobem browser w `ci.yml`):
+The Vitest suite covers analysis, saved history normalization, and storage failures. Playwright also exercises analysis and history after a quota error, cache version cleanup, current online HTML, and the offline fallback.
 
 ```bash
 python -m venv .venv-e2e
-# Aktywuj ten venv przed dalszymi poleceniami.
+. .venv-e2e/bin/activate
 python -m pip install -r e2e/requirements.txt
 python -m playwright install chromium
-python -m pytest -q e2e
+PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/path/to/chromium python -m pytest -q e2e
 ```
 
-Na Linux może być potrzebne `python -m playwright install --with-deps chromium` z uprawnieniami administratora. Alternatywnie `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` wskazuje istniejący Chromium. Testy uruchamiają i zatrzymują własny serwer, używają nowego kontekstu przeglądarki i zapisują logi w ignorowanym `e2e/artifacts/`. Pełny backend musi mieć zainstalowane swoje zależności; `E2E_API_PYTHON` jest opcjonalnym wyborem jego interpretera w AutoDesk/BankGuard. Testy nie uruchamiają wdrożenia.
+## Limits
+
+The score is a heuristic aid, not a probability or a guarantee of safety. The rule set has not been measured against a representative labeled Polish and English corpus. Do not paste passwords, full card numbers, PESEL, or banking credentials. Browser history is local and unencrypted; clear it on shared devices.

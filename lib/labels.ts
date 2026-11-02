@@ -1,0 +1,4 @@
+import type { MessageType, ScamCategory, ConfidenceLevel } from "@/lib/types";
+export const messageTypeLabels: Record<MessageType, string> = { SMS: "SMS", Email: "E-mail", "Phone call": "Rozmowa telefoniczna", "Bank message": "Wiadomość z banku", "Delivery message": "Wiadomość o przesyłce", "BLIK request": "Prośba o BLIK", "Investment offer": "Oferta inwestycji", Other: "Inna" };
+export const categoryLabels: Record<ScamCategory, string> = { phishing: "wyłudzanie danych", banking_fraud: "oszustwo bankowe", blik_fraud: "oszustwo na BLIK", delivery_scam: "oszustwo na przesyłkę", investment_scam: "oszustwo inwestycyjne", crypto_scam: "oszustwo kryptowalutowe", remote_access_scam: "wyłudzenie zdalnego dostępu", identity_theft: "kradzież tożsamości", social_engineering: "manipulacja", safe_message: "brak typowych sygnałów" };
+export const confidenceLabels: Record<ConfidenceLevel, string> = { low: "małe", medium: "średnie", high: "duże" };

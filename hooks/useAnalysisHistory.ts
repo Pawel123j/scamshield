@@ -1,44 +1,28 @@
 "use client";
-
-import { useEffect, useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import type { AnalysisResult } from "@/lib/types";
 import { readAnalysisHistory, saveAnalysisHistory } from "@/lib/storage";
 
+const initial = { history: [] as AnalysisResult[], saveError: false, hasLoaded: false };
+let snapshot = initial;
+const listeners = new Set<() => void>();
+function subscribe(listener: () => void) { listeners.add(listener); return () => { listeners.delete(listener); }; }
+function publish(next: typeof initial) { snapshot = next; listeners.forEach(listener => listener()); }
+function save(history: AnalysisResult[]) {
+  publish({ history, hasLoaded: true, saveError: !saveAnalysisHistory(history) });
+}
+
+/** Shared tab memory preserves unsaved analyses when navigating to History. */
 export function useAnalysisHistory() {
-  const [history, setHistory] = useState<AnalysisResult[]>([]);
-  const [hasLoaded, setHasLoaded] = useState(false);
-
+  const state = useSyncExternalStore(subscribe, () => snapshot, () => initial);
   useEffect(() => {
-    setHistory(readAnalysisHistory());
-    setHasLoaded(true);
+    if (!snapshot.hasLoaded) publish({ history: readAnalysisHistory(), saveError: false, hasLoaded: true });
   }, []);
-
-  const addAnalysis = (result: AnalysisResult) => {
-    setHistory((currentHistory) => {
-      const nextHistory = [result, ...currentHistory].slice(0, 50);
-      saveAnalysisHistory(nextHistory);
-      return nextHistory;
-    });
-  };
-
-  const deleteAnalysis = (id: string) => {
-    setHistory((currentHistory) => {
-      const nextHistory = currentHistory.filter((item) => item.id !== id);
-      saveAnalysisHistory(nextHistory);
-      return nextHistory;
-    });
-  };
-
-  const clearHistory = () => {
-    setHistory([]);
-    saveAnalysisHistory([]);
-  };
-
   return {
-    history,
-    hasLoaded,
-    addAnalysis,
-    deleteAnalysis,
-    clearHistory
+    ...state,
+    addAnalysis: (result: AnalysisResult) => save([result, ...snapshot.history].slice(0, 50)),
+    deleteAnalysis: (id: string) => save(snapshot.history.filter(item => item.id !== id)),
+    clearHistory: () => save([]),
+    retrySave: () => save(snapshot.history)
   };
 }

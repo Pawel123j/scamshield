@@ -6,9 +6,7 @@ export function Disclaimer() {
       <div className="flex gap-3">
         <ShieldAlert aria-hidden="true" className="mt-1 shrink-0" size={22} />
         <p className="leading-7">
-          This tool helps identify suspicious messages, but it does not replace official bank, police, or cybersecurity
-          support. When in doubt, contact your bank using the official phone number or report the incident to appropriate
-          authorities.
+          Narzędzie edukacyjne wskazuje podejrzane sygnały, ale może się mylić. Niski wynik nie gwarantuje bezpieczeństwa. W razie wątpliwości zadzwoń do banku pod oficjalny numer lub zgłoś sprawę odpowiednim służbom.
         </p>
       </div>
     </section>
