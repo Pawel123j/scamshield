@@ -11,16 +11,19 @@ interface CopyButtonProps {
   variant?: "primary" | "secondary";
 }
 
-export function CopyButton({ text, label = "Copy", copiedLabel = "Copied!", variant = "primary" }: CopyButtonProps) {
+export function CopyButton({ text, label = "Kopiuj", copiedLabel = "Skopiowano!", variant = "primary" }: CopyButtonProps) {
+  const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
     try {
+      setError(false);
       await navigator.clipboard.writeText(text);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1800);
     } catch {
       setCopied(false);
+      setError(true);
     }
   };
 
@@ -37,7 +40,7 @@ export function CopyButton({ text, label = "Copy", copiedLabel = "Copied!", vari
       )}
     >
       {copied ? <Check aria-hidden="true" size={20} /> : <Copy aria-hidden="true" size={20} />}
-      {copied ? copiedLabel : label}
+      {error ? "Nie skopiowano — spróbuj ponownie" : copied ? copiedLabel : label}
     </button>
   );
 }

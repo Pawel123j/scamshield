@@ -22,7 +22,7 @@ export function SeniorModeToggle({ enabled, onChange }: SeniorModeToggleProps) {
       )}
     >
       <Accessibility aria-hidden="true" size={19} />
-      Senior Mode
+      Tryb seniora
     </button>
   );
 }

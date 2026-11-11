@@ -1,3 +1,4 @@
+import { categoryLabels, confidenceLabels } from "@/lib/labels";
 import { AlertTriangle, CheckCircle2, ListChecks, ShieldAlert } from "lucide-react";
 import { CopyButton } from "@/components/CopyButton";
 import { PDFExportButton } from "@/components/PDFExportButton";
@@ -20,28 +21,27 @@ export function AnalysisResult({ result }: AnalysisResultProps) {
           <div className="flex items-start gap-3">
             <ShieldAlert aria-hidden="true" className="mt-1 shrink-0 text-tealguard" size={24} />
             <div>
-              <h2 className="text-2xl font-black text-ink">Analysis summary</h2>
+              <h2 className="text-2xl font-black text-ink">Podsumowanie analizy</h2>
               <p className="mt-2 text-lg font-bold leading-8 text-slate-700">{result.shortSummary}</p>
               <p className="mt-2 leading-7 text-slate-700">{result.detailedExplanation}</p>
               <div className="mt-4 flex flex-wrap gap-2 text-sm font-bold">
                 <span className="rounded-full bg-teal-50 px-3 py-1 text-tealguard">
-                  Category: {result.dominantCategory.replace(/_/g, " ")}
+                  Kategoria: {categoryLabels[result.dominantCategory]}
                 </span>
                 <span className="rounded-full bg-cyan-50 px-3 py-1 text-cyan-800">
-                  {result.confidence} confidence
+                  Nasilenie sygnałów: {confidenceLabels[result.confidence]}
                 </span>
                 {result.wasTruncated && (
-                  <span className="rounded-full bg-amber-50 px-3 py-1 text-amber-900">Input was truncated for safety</span>
+                  <span className="rounded-full bg-amber-50 px-3 py-1 text-amber-900">Przeanalizowano początek zbyt długiej wiadomości</span>
                 )}
               </div>
               <p className="mt-3 text-sm leading-6 text-slate-600">
-                The score is explainable: each warning sign contributes points, and contextual combinations can add
-                extra weight. The final score is clamped to 100.
+                Każdy sygnał dodaje punkty; połączenie sygnałów może zwiększyć wynik. Skala kończy się na 100. Wynik nie jest prawdopodobieństwem oszustwa ani gwarancją bezpieczeństwa.
               </p>
             </div>
           </div>
           <div className="flex flex-wrap gap-3">
-            <CopyButton text={buildAnalysisReportText(result)} label="Copy summary" variant="secondary" />
+            <CopyButton text={buildAnalysisReportText(result)} label="Kopiuj podsumowanie" variant="secondary" />
             <PDFExportButton result={result} />
           </div>
         </div>
@@ -50,7 +50,7 @@ export function AnalysisResult({ result }: AnalysisResultProps) {
       <section className="rounded-3xl border border-teal-100 bg-white p-6 shadow-soft">
         <h2 className="flex items-center gap-2 text-xl font-black text-ink">
           <AlertTriangle aria-hidden="true" className="text-honey" size={22} />
-          Detected indicators
+          Wykryte sygnały
         </h2>
         {result.indicators.length > 0 ? (
           <div className="mt-4 grid gap-3">
@@ -65,14 +65,14 @@ export function AnalysisResult({ result }: AnalysisResultProps) {
                 <p className="mt-1 text-sm leading-6 text-slate-600">{indicator.description}</p>
                 {indicator.matchedKeywords && indicator.matchedKeywords.length > 0 && (
                   <p className="mt-2 text-xs font-semibold text-slate-500">
-                    Match: {indicator.matchedKeywords.slice(0, 3).join(", ")}
+                    Dopasowanie: {indicator.matchedKeywords.slice(0, 3).join(", ")}
                   </p>
                 )}
               </article>
             ))}
           </div>
         ) : (
-          <p className="mt-3 text-slate-600">No common scam indicators were found in the provided text.</p>
+          <p className="mt-3 text-slate-600">Nie wykryto typowych sygnałów oszustwa. Brak sygnałów nie gwarantuje bezpieczeństwa.</p>
         )}
       </section>
 
@@ -81,7 +81,7 @@ export function AnalysisResult({ result }: AnalysisResultProps) {
       <section className="rounded-3xl border border-teal-100 bg-white p-6 shadow-soft">
         <h2 className="flex items-center gap-2 text-xl font-black text-ink">
           <ListChecks aria-hidden="true" className="text-tealguard" size={22} />
-          What should I do now?
+          Co zrobić teraz?
         </h2>
         <ol className="mt-4 space-y-3 text-slate-700">
           {result.nextSteps.map((step, index) => (
@@ -99,9 +99,9 @@ export function AnalysisResult({ result }: AnalysisResultProps) {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="flex items-center gap-2 text-xl font-black text-ink">
             <CheckCircle2 aria-hidden="true" className="text-tealguard" size={22} />
-            Recommended actions
+            Zalecane działania
           </h2>
-          <CopyButton text={result.recommendations.join("\n")} label="Copy recommendations" variant="secondary" />
+          <CopyButton text={result.recommendations.join("\n")} label="Kopiuj zalecenia" variant="secondary" />
         </div>
         <ul className="mt-4 space-y-3 text-slate-700">
           {result.recommendations.map((action) => (

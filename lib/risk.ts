@@ -15,11 +15,11 @@ export function getRiskLevel(score: number): RiskLevel {
 export function getRiskLabel(level: RiskLevel) {
   switch (level) {
     case "low":
-      return "Low risk";
+      return "Niskie ryzyko";
     case "medium":
-      return "Medium risk";
+      return "Średnie ryzyko";
     case "high":
-      return "High risk";
+      return "Wysokie ryzyko";
   }
 }
 

@@ -26,7 +26,7 @@ export function Navbar({ seniorMode, setSeniorMode, darkMode, setDarkMode, onOpe
             className="inline-flex min-h-11 items-center gap-2 rounded-full bg-tealguard px-5 py-2 text-sm font-bold text-white shadow-soft transition hover:bg-ocean focus:outline-none focus:ring-4 focus:ring-teal-200"
           >
             <SearchCheck aria-hidden="true" size={19} />
-            Check a suspicious message
+            Sprawdź wiadomość
           </Link>
           <SeniorModeToggle enabled={seniorMode} onChange={setSeniorMode} />
           <DarkModeToggle enabled={darkMode} onChange={setDarkMode} />

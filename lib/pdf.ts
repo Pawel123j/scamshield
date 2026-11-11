@@ -1,3 +1,4 @@
+import { messageTypeLabels, categoryLabels, confidenceLabels } from "@/lib/labels";
 import { formatDateTime } from "@/lib/date";
 import { getRiskLabel } from "@/lib/risk";
 import type { AnalysisResult } from "@/lib/types";
@@ -5,37 +6,37 @@ import type { AnalysisResult } from "@/lib/types";
 export function buildAnalysisReportText(result: AnalysisResult) {
   const indicators = result.indicators.length
     ? result.indicators.map((indicator) => `- ${indicator.label}: ${indicator.description}`).join("\n")
-    : "- No common scam indicators detected.";
+    : "- Nie wykryto typowych sygnałów oszustwa.";
 
   const scoring = result.scoringBreakdown.map((item) => `- ${item.label}: +${item.points}`).join("\n");
   const recommendations = result.recommendations.map((item) => `- ${item}`).join("\n");
   const nextSteps = result.nextSteps.map((item, index) => `${index + 1}. ${item}`).join("\n");
 
   return [
-    `Date: ${formatDateTime(result.createdAt)}`,
-    `Message type: ${result.messageType}`,
-    `Risk score: ${result.score}/100`,
-    `Risk level: ${getRiskLabel(result.level)}`,
-    `Dominant category: ${result.dominantCategory.replace(/_/g, " ")}`,
-    `Confidence: ${result.confidence}`,
-    `Preview: ${result.maskedPreview || result.preview || "No preview saved."}`,
+    `Data: ${formatDateTime(result.createdAt)}`,
+    `Typ wiadomości: ${messageTypeLabels[result.messageType]}`,
+    `Wynik ryzyka: ${result.score}/100`,
+    `Poziom ryzyka: ${getRiskLabel(result.level)}`,
+    `Dominująca kategoria: ${categoryLabels[result.dominantCategory]}`,
+    `Nasilenie sygnałów: ${confidenceLabels[result.confidence]}`,
+    `Podgląd: ${result.maskedPreview || result.preview || "Brak podglądu."}`,
     "",
-    "Summary:",
+    "Podsumowanie:",
     result.detailedExplanation,
     "",
-    "Detected indicators:",
+    "Wykryte sygnały:",
     indicators,
     "",
-    "Scoring breakdown:",
+    "Składniki punktacji:",
     scoring,
     "",
-    "Recommended actions:",
+    "Zalecane działania:",
     recommendations,
     "",
-    "What should I do now?",
+    "Co zrobić teraz?",
     nextSteps,
     "",
-    "Disclaimer:",
-    "This tool helps identify suspicious messages, but it does not replace official bank, police, or cybersecurity support."
+    "Ograniczenia:",
+    "Narzędzie edukacyjne może się mylić. Niski wynik nie gwarantuje bezpieczeństwa. W razie wątpliwości skontaktuj się z bankiem lub policją oficjalnym kanałem."
   ].join("\n");
 }

@@ -7,20 +7,21 @@ import { AnalysisResult } from "@/components/AnalysisResult";
 import { EmptyState } from "@/components/EmptyState";
 import { RiskBadge } from "@/components/RiskBadge";
 import { useAnalysisHistory } from "@/hooks/useAnalysisHistory";
+import { messageTypeLabels } from "@/lib/labels";
 import { formatDateTime } from "@/lib/date";
 import type { RiskLevel } from "@/lib/types";
 
 type HistoryFilter = "all" | RiskLevel;
 
 const filters: Array<{ label: string; value: HistoryFilter }> = [
-  { label: "All", value: "all" },
-  { label: "Low", value: "low" },
-  { label: "Medium", value: "medium" },
-  { label: "High", value: "high" }
+  { label: "Wszystkie", value: "all" },
+  { label: "Niskie", value: "low" },
+  { label: "Średnie", value: "medium" },
+  { label: "Wysokie", value: "high" }
 ];
 
 export default function HistoryPage() {
-  const { history, hasLoaded, deleteAnalysis, clearHistory } = useAnalysisHistory();
+  const { history, hasLoaded, deleteAnalysis, clearHistory, saveError, retrySave } = useAnalysisHistory();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [filter, setFilter] = useState<HistoryFilter>("all");
 
@@ -38,13 +39,14 @@ export default function HistoryPage() {
 
   return (
     <div className="space-y-8">
+      {saveError && <p role="status" className="rounded-xl bg-amber-50 p-4">Nie zapisano historii. Zmiany pozostają w tej karcie. <button className="min-h-12 underline" onClick={retrySave}>Ponów zapis</button></p>}
       <section className="rounded-3xl bg-white p-6 shadow-soft">
         <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
           <div>
-            <p className="font-bold text-tealguard">Local device history</p>
-            <h1 className="mt-2 text-3xl font-black text-ink sm:text-4xl">Analysis history</h1>
+            <p className="font-bold text-tealguard">Historia na tym urządzeniu</p>
+            <h1 className="mt-2 text-3xl font-black text-ink sm:text-4xl">Historia analiz</h1>
             <p className="mt-3 max-w-3xl text-slate-600">
-              Previous analyses are stored in LocalStorage on this browser. They are not uploaded anywhere.
+              Historia pozostaje w tej przeglądarce. Treść nie jest wysyłana do zewnętrznej usługi.
             </p>
           </div>
           {history.length > 0 && (
@@ -54,7 +56,7 @@ export default function HistoryPage() {
               className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-red-200 bg-red-50 px-5 py-3 font-bold text-red-800 transition hover:bg-red-100 focus:outline-none focus:ring-4 focus:ring-red-100"
             >
               <Trash2 aria-hidden="true" size={20} />
-              Delete all
+              Usuń całą historię
             </button>
           )}
         </div>
@@ -63,15 +65,15 @@ export default function HistoryPage() {
       {!hasLoaded || history.length === 0 ? (
         <EmptyState
           icon={History}
-          title="No saved analyses"
-          description="Analyze a suspicious message and the result will be saved here for later review."
+          title="Brak zapisanych analiz"
+          description="Sprawdź wiadomość, aby zachować wynik do późniejszego przeglądania."
           action={
             <Link
               href="/analyze"
               className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-tealguard px-5 py-3 font-bold text-white focus:outline-none focus:ring-4 focus:ring-teal-200"
             >
               <SearchCheck aria-hidden="true" size={20} />
-              Analyze a message
+              Sprawdź wiadomość
             </Link>
           }
         />
@@ -81,7 +83,7 @@ export default function HistoryPage() {
             <div className="mb-5 flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-2 pr-2 text-sm font-black text-ink">
                 <Filter aria-hidden="true" size={18} />
-                Filter
+                Filtr
               </span>
               {filters.map((item) => (
                 <button
@@ -98,26 +100,26 @@ export default function HistoryPage() {
             </div>
 
             {filteredHistory.length === 0 ? (
-              <EmptyState icon={History} title="No analyses match this filter" description="Choose another risk level or run a new analysis." />
+              <EmptyState icon={History} title="Brak wyników dla tego filtra" description="Wybierz inny poziom ryzyka lub sprawdź nową wiadomość." />
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[820px] text-left">
                   <thead>
                     <tr className="border-b border-slate-100 text-sm text-slate-500">
-                      <th className="py-3 pr-4 font-bold">Date</th>
-                      <th className="py-3 pr-4 font-bold">Message type</th>
-                      <th className="py-3 pr-4 font-bold">Preview</th>
-                      <th className="py-3 pr-4 font-bold">Score</th>
-                      <th className="py-3 pr-4 font-bold">Risk</th>
-                      <th className="py-3 pr-4 font-bold">Details</th>
-                      <th className="py-3 pr-4 font-bold">Delete</th>
+                      <th className="py-3 pr-4 font-bold">Data</th>
+                      <th className="py-3 pr-4 font-bold">Typ wiadomości</th>
+                      <th className="py-3 pr-4 font-bold">Podgląd</th>
+                      <th className="py-3 pr-4 font-bold">Wynik</th>
+                      <th className="py-3 pr-4 font-bold">Ryzyko</th>
+                      <th className="py-3 pr-4 font-bold">Szczegóły</th>
+                      <th className="py-3 pr-4 font-bold">Usuń</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredHistory.map((item) => (
                       <tr key={item.id} className="border-b border-slate-100 align-top">
                         <td className="py-4 pr-4 text-sm text-slate-600">{formatDateTime(item.createdAt)}</td>
-                        <td className="py-4 pr-4 font-semibold text-ink">{item.messageType}</td>
+                        <td className="py-4 pr-4 font-semibold text-ink">{messageTypeLabels[item.messageType]}</td>
                         <td className="max-w-md py-4 pr-4 text-sm leading-6 text-slate-600">{item.preview}</td>
                         <td className="py-4 pr-4 font-black text-ink">{item.score}/100</td>
                         <td className="py-4 pr-4">
@@ -130,7 +132,7 @@ export default function HistoryPage() {
                             className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-teal-100 bg-white px-4 py-2 font-bold text-tealguard transition hover:bg-teal-50 focus:outline-none focus:ring-4 focus:ring-teal-200"
                           >
                             <Eye aria-hidden="true" size={18} />
-                            Details
+                            Szczegóły
                           </button>
                         </td>
                         <td className="py-4 pr-4">
@@ -152,7 +154,7 @@ export default function HistoryPage() {
           </section>
 
           <section>
-            <h2 className="mb-4 text-2xl font-black text-ink">Selected analysis</h2>
+            <h2 className="mb-4 text-2xl font-black text-ink">Wybrana analiza</h2>
             {selected && <AnalysisResult result={selected} />}
           </section>
         </div>
