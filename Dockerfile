@@ -3,8 +3,9 @@ FROM node:24-slim
 WORKDIR /app
 
 COPY package*.json ./
+COPY patches ./patches
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 

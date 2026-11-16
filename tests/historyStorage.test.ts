@@ -8,6 +8,7 @@
  */
 
 import { beforeEach, describe, expect, it } from "vitest";
+import { formatDateTime } from "@/lib/date";
 
 import { readAnalysisHistory, saveAnalysisHistory, setLocalStorageItem, storageKeys } from "@/lib/localStorage";
 
@@ -36,6 +37,14 @@ beforeEach(() => {
 });
 
 describe("readAnalysisHistory — zapisy ze starszych wersji", () => {
+  it("can display a saved analysis with a damaged date without discarding the record", () => {
+    seed([{ id: "legacy-date", createdAt: "not-a-date", messageType: "SMS", score: 10 }]);
+    const [item] = readAnalysisHistory();
+    expect(item.id).toBe("legacy-date");
+    expect(formatDateTime(item.createdAt)).toBe("Nieznana data");
+    expect(JSON.parse(store.get(storageKeys.analysisHistory)!)[0].createdAt).toBe("not-a-date");
+  });
+
   it("maskuje numer karty w podglądzie odtworzonym z originalText", () => {
     // REGRESJA: starsze zapisy miały tylko `originalText`. Fallback brał ten
     // tekst surowy i podawał go dalej jako `maskedPreview` — pole, którego

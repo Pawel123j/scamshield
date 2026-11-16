@@ -57,3 +57,56 @@ def test_pwa_removes_old_cache_uses_current_html_and_falls_back_offline():
         expect(page.get_by_role('heading', name='Brak połączenia', exact=True)).to_be_visible()
         context.set_offline(False)
         context.close()
+
+
+def test_history_keeps_75_results_across_failed_save_navigation_retry_and_reload():
+    with application('scamshield', SERVER, REPO, URL) as url, browser() as b:
+        page = b.new_page(viewport={'width': 1280, 'height': 900})
+        page.goto(url + '/analyze')
+        page.get_by_label('Treść wiadomości', exact=True).fill('Spotkanie jutro w bibliotece.')
+        page.get_by_role('button', name='Sprawdź wiadomość', exact=True).click()
+        page.wait_for_function("JSON.parse(localStorage.getItem('scamshield.analysisHistory') || '[]').length === 1")
+        # A real analyzer result supplies the fixture schema; seed the documented
+        # boundary so this tests the hook/UI as well as the storage helper.
+        page.evaluate("""() => {
+            const sample = JSON.parse(localStorage.getItem('scamshield.analysisHistory'))[0];
+            const history = Array.from({length:75}, (_, i) => ({...sample,
+                id:`archive-${i}`, originalText:`Archiwalna wiadomość ${i}`,
+                createdAt:i === 4 ? 'not-a-date' : sample.createdAt,
+                preview:`Archiwalna wiadomość ${i}`, maskedPreview:`Archiwalna wiadomość ${i}`
+            }));
+            localStorage.setItem('scamshield.analysisHistory', JSON.stringify(history));
+        }""")
+        page.reload()
+        page.evaluate("""() => {
+            const original = Storage.prototype.setItem;
+            window.__restoreSetItem = () => { Storage.prototype.setItem = original; };
+            Storage.prototype.setItem = function(key, value) {
+                if (key === 'scamshield.analysisHistory') throw new DOMException('Full', 'QuotaExceededError');
+                return original.call(this, key, value);
+            };
+        }""")
+        content = 'Bank nigdy nie poprosi o PIN ani kod BLIK.'
+        page.get_by_label('Treść wiadomości', exact=True).fill(content)
+        page.get_by_role('button', name='Sprawdź wiadomość', exact=True).click()
+        expect(page.get_by_role('status')).to_contain_text('Nie zapisano historii')
+        assert page.evaluate("JSON.parse(localStorage.getItem('scamshield.analysisHistory'))[0].id") == 'archive-0'
+        # Client-side navigation must preserve the unsaved result and 74 prior ones.
+        page.get_by_role('link', name='Historia', exact=True).click()
+        expect(page.locator('tbody tr')).to_have_count(75)
+        expect(page.locator('tbody tr').first).to_contain_text(content)
+        expect(page.locator('tbody tr').last).to_contain_text('Archiwalna wiadomość 73')
+        expect(page.get_by_role('cell', name='Nieznana data', exact=True)).to_have_count(1)
+        expect(page.get_by_role('status')).to_contain_text('Nie zapisano historii')
+        page.evaluate('window.__restoreSetItem()')
+        page.get_by_role('button', name='Ponów zapis', exact=True).click()
+        expect(page.get_by_role('status')).to_have_count(0)
+        stored = page.evaluate("JSON.parse(localStorage.getItem('scamshield.analysisHistory'))")
+        assert len(stored) == 75
+        assert stored[0]['originalText'] == content
+        assert [item['id'] for item in stored[1:]] == [f'archive-{i}' for i in range(74)]
+        page.reload()
+        expect(page.locator('tbody tr')).to_have_count(75)
+        expect(page.locator('tbody tr').first).to_contain_text(content)
+        expect(page.locator('tbody tr').last).to_contain_text('Archiwalna wiadomość 73')
+        expect(page.get_by_role('cell', name='Nieznana data', exact=True)).to_have_count(1)

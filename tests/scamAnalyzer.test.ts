@@ -103,3 +103,29 @@ describe("scam analysis engine", () => {
     expect(masked).toContain("**** **** **** 3456");
   });
 });
+
+
+describe("protective wording cannot hide exceptions or pronoun-based requests", () => {
+  it.each([
+    "Nie podawaj kodu BLIK przez telefon, wyślij go SMS-em na ten numer.",
+    "Nie podawaj kodu BLIK. Wyślij go SMS-em na ten numer."
+  ])("retains the BLIK warning for %s", (text) => {
+    const result = analyzeMessage("SMS", text);
+    expect(result.indicators.some(item => item.id === "blik-request")).toBe(true);
+    expect(result.score).toBeGreaterThanOrEqual(34);
+  });
+
+  it("retains password signals for an exception to a warning", () => {
+    const result = analyzeMessage("Email", "Do not share your password with anyone except me.");
+    expect(result.indicators.some(item => item.id === "personal-data-request")).toBe(true);
+    expect(result.score).toBeGreaterThanOrEqual(26);
+  });
+
+  it.each([
+    "Bank nigdy nie poprosi o PIN ani kod BLIK, ale wyślij go SMS-em na ten numer.",
+    "Bank nigdy nie poprosi o PIN ani kod BLIK. Wyślij go SMS-em na ten numer.",
+    "Bank: nie podawaj PIN ani kodu BLIK nikomu poza nami. Prześlij je w odpowiedzi."
+  ])("does not lower existing high risk for %s", (text) => {
+    expect(analyzeMessage("SMS", text).level).toBe("high");
+  });
+});
