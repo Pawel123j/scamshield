@@ -4,8 +4,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      # Środowisko deweloperskie; obraz produkcyjny to domyślny etap `runner`.
+      target: dev
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     volumes:
       - .:/app
       - /app/node_modules
