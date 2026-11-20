@@ -1,0 +1,351 @@
+{
+  "source": "30 hand-written synthetic development examples; not real-world accuracy",
+  "total": 30,
+  "expectedBandMatches": 26,
+  "confusion": [
+    {
+      "expected": "low",
+      "low": 10,
+      "medium": 1,
+      "high": 1
+    },
+    {
+      "expected": "high",
+      "low": 2,
+      "medium": 0,
+      "high": 16
+    }
+  ],
+  "results": [
+    {
+      "id": "warning-bank",
+      "kind": "warning",
+      "type": "SMS",
+      "text": "Bank nigdy nie poprosi o PIN ani kod BLIK.",
+      "expected": "low",
+      "regression": true,
+      "actual": "low",
+      "score": 18,
+      "matches": true
+    },
+    {
+      "id": "warning-bank-context",
+      "kind": "warning",
+      "type": "Bank message",
+      "text": "Bank nigdy nie poprosi o PIN ani kod BLIK.",
+      "expected": "low",
+      "regression": true,
+      "actual": "low",
+      "score": 28,
+      "matches": true
+    },
+    {
+      "id": "warning-password",
+      "kind": "warning",
+      "type": "SMS",
+      "text": "Nie podawaj hasła ani kodu BLIK.",
+      "expected": "low",
+      "regression": true,
+      "actual": "low",
+      "score": 8,
+      "matches": true
+    },
+    {
+      "id": "warning-card",
+      "kind": "warning",
+      "type": "SMS",
+      "text": "Nigdy nie wysyłaj numeru karty ani CVV.",
+      "expected": "low",
+      "regression": true,
+      "actual": "low",
+      "score": 8,
+      "matches": true
+    },
+    {
+      "id": "warning-en",
+      "kind": "warning",
+      "type": "Email",
+      "text": "Never share your password or PIN.",
+      "expected": "low",
+      "regression": true,
+      "actual": "low",
+      "score": 8,
+      "matches": true
+    },
+    {
+      "id": "warning-en-send",
+      "kind": "warning",
+      "type": "Email",
+      "text": "Do not send your password or BLIK code.",
+      "expected": "low",
+      "regression": true,
+      "actual": "low",
+      "score": 8,
+      "matches": true
+    },
+    {
+      "id": "direct-password",
+      "kind": "direct-request",
+      "type": "SMS",
+      "text": "Wyślij mi hasło.",
+      "expected": "high",
+      "regression": true,
+      "actual": "high",
+      "score": 91,
+      "matches": true
+    },
+    {
+      "id": "direct-password-ascii",
+      "kind": "direct-request",
+      "type": "SMS",
+      "text": "Wyslij mi haslo.",
+      "expected": "high",
+      "regression": true,
+      "actual": "high",
+      "score": 91,
+      "matches": true
+    },
+    {
+      "id": "direct-pin",
+      "kind": "direct-request",
+      "type": "Other",
+      "text": "Podaj PIN.",
+      "expected": "high",
+      "regression": true,
+      "actual": "high",
+      "score": 91,
+      "matches": true
+    },
+    {
+      "id": "direct-blik",
+      "kind": "direct-request",
+      "type": "SMS",
+      "text": "Prześlij mi kod BLIK.",
+      "expected": "high",
+      "regression": true,
+      "actual": "high",
+      "score": 99,
+      "matches": true
+    },
+    {
+      "id": "direct-card",
+      "kind": "direct-request",
+      "type": "Email",
+      "text": "Wyślij nam numer karty.",
+      "expected": "high",
+      "regression": true,
+      "actual": "high",
+      "score": 90,
+      "matches": true
+    },
+    {
+      "id": "direct-en",
+      "kind": "direct-request",
+      "type": "Email",
+      "text": "Send me your password.",
+      "expected": "high",
+      "regression": true,
+      "actual": "high",
+      "score": 91,
+      "matches": true
+    },
+    {
+      "id": "direct-code-en",
+      "kind": "direct-request",
+      "type": "SMS",
+      "text": "Please send your verification code.",
+      "expected": "high",
+      "regression": true,
+      "actual": "high",
+      "score": 65,
+      "matches": true
+    },
+    {
+      "id": "mixed-next-sentence",
+      "kind": "mixed",
+      "type": "SMS",
+      "text": "Bank nigdy nie poprosi o PIN ani kod BLIK. Wyślij mi hasło.",
+      "expected": "high",
+      "regression": true,
+      "actual": "high",
+      "score": 100,
+      "matches": true
+    },
+    {
+      "id": "mixed-same-sentence",
+      "kind": "mixed",
+      "type": "SMS",
+      "text": "Nie podawaj hasła, ale podaj PIN teraz.",
+      "expected": "high",
+      "regression": true,
+      "actual": "high",
+      "score": 100,
+      "matches": true
+    },
+    {
+      "id": "mixed-repeated-secret",
+      "kind": "mixed",
+      "type": "SMS",
+      "text": "Nie podawaj hasła i wyślij mi hasło.",
+      "expected": "high",
+      "regression": true,
+      "actual": "high",
+      "score": 91,
+      "matches": true
+    },
+    {
+      "id": "mixed-en",
+      "kind": "mixed",
+      "type": "Email",
+      "text": "Never share your password, but send me your PIN.",
+      "expected": "high",
+      "regression": true,
+      "actual": "high",
+      "score": 91,
+      "matches": true
+    },
+    {
+      "id": "mixed-url",
+      "kind": "mixed",
+      "type": "Bank message",
+      "text": "Bank nigdy nie poprosi o PIN ani kod BLIK. Konto zostanie zablokowane. Kliknij link http://bank-check.example.",
+      "expected": "high",
+      "regression": true,
+      "actual": "high",
+      "score": 100,
+      "matches": true
+    },
+    {
+      "id": "negative-urgency",
+      "kind": "mixed",
+      "type": "SMS",
+      "text": "Nie zwlekaj, wyślij mi hasło.",
+      "expected": "high",
+      "regression": true,
+      "actual": "high",
+      "score": 100,
+      "matches": true
+    },
+    {
+      "id": "family",
+      "kind": "benign",
+      "type": "SMS",
+      "text": "Cześć mamo, będę dziś o 17:00. Kupić coś po drodze?",
+      "expected": "low",
+      "regression": true,
+      "actual": "low",
+      "score": 8,
+      "matches": true
+    },
+    {
+      "id": "postal-code",
+      "kind": "benign",
+      "type": "SMS",
+      "text": "Podaj kod pocztowy do wysyłki książki.",
+      "expected": "low",
+      "regression": true,
+      "actual": "low",
+      "score": 8,
+      "matches": true
+    },
+    {
+      "id": "password-update",
+      "kind": "benign",
+      "type": "Email",
+      "text": "Twoje hasło zostało zmienione.",
+      "expected": "low",
+      "regression": true,
+      "actual": "low",
+      "score": 26,
+      "matches": true
+    },
+    {
+      "id": "meeting",
+      "kind": "benign",
+      "type": "SMS",
+      "text": "Spotkajmy się jutro w bibliotece.",
+      "expected": "low",
+      "regression": true,
+      "actual": "low",
+      "score": 8,
+      "matches": true
+    },
+    {
+      "id": "delivery-payment",
+      "kind": "other-scam",
+      "type": "Delivery message",
+      "text": "Paczka wstrzymana. Dopłać 2,99 zł: bit.ly/doplata-kurier",
+      "expected": "high",
+      "regression": true,
+      "actual": "high",
+      "score": 61,
+      "matches": true
+    },
+    {
+      "id": "remote-bank",
+      "kind": "other-scam",
+      "type": "Phone call",
+      "text": "Zainstaluj AnyDesk, żeby konsultant banku mógł zabezpieczyć konto. Udostępnij ekran.",
+      "expected": "high",
+      "regression": true,
+      "actual": "high",
+      "score": 68,
+      "matches": true
+    },
+    {
+      "id": "investment",
+      "kind": "other-scam",
+      "type": "Investment offer",
+      "text": "Gwarantowany zysk 300% bez ryzyka. Zarób na crypto profit.",
+      "expected": "high",
+      "regression": true,
+      "actual": "high",
+      "score": 78,
+      "matches": true
+    },
+    {
+      "id": "obfuscated-request",
+      "kind": "limitation",
+      "type": "SMS",
+      "text": "W y ś l i j m i h a s ł o.",
+      "expected": "high",
+      "regression": false,
+      "actual": "low",
+      "score": 8,
+      "matches": false
+    },
+    {
+      "id": "indirect-request",
+      "kind": "limitation",
+      "type": "SMS",
+      "text": "Potrzebuję twojego hasła, by naprawić dostęp.",
+      "expected": "high",
+      "regression": false,
+      "actual": "low",
+      "score": 8,
+      "matches": false
+    },
+    {
+      "id": "quoted-example",
+      "kind": "limitation",
+      "type": "Email",
+      "text": "Przykład oszustwa z lekcji: „Podaj PIN”.",
+      "expected": "low",
+      "regression": false,
+      "actual": "high",
+      "score": 91,
+      "matches": false
+    },
+    {
+      "id": "legitimate-delivery",
+      "kind": "limitation",
+      "type": "Delivery message",
+      "text": "Kurier dostarczy paczkę jutro.",
+      "expected": "low",
+      "regression": false,
+      "actual": "medium",
+      "score": 39,
+      "matches": false
+    }
+  ]
+}

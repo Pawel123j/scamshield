@@ -7,6 +7,8 @@ import type {
   ScoringBreakdownItem
 } from "@/lib/types";
 
+export const ANALYSIS_HISTORY_LIMIT = 75;
+
 export const storageKeys = {
   analysisHistory: "scamshield.analysisHistory",
   checklist: "scamshield.checklist",
@@ -77,7 +79,7 @@ export function readAnalysisHistory(): AnalysisResult[] {
 }
 
 export function saveAnalysisHistory(history: AnalysisResult[]) {
-  return setLocalStorageItem(storageKeys.analysisHistory, history.slice(0, 75));
+  return setLocalStorageItem(storageKeys.analysisHistory, history.slice(0, ANALYSIS_HISTORY_LIMIT));
 }
 
 /**

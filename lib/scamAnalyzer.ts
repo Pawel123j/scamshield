@@ -1,5 +1,6 @@
 import { categoryLabels } from "@/lib/labels";
 import { getRiskLevel } from "@/lib/risk";
+import { directCredentialRequest, withoutProtectiveCredentialSpans } from "@/lib/credentialContext";
 import type {
   AnalysisResult,
   ConfidenceLevel,
@@ -20,6 +21,7 @@ type RuleDefinition = {
   severity: RiskLevel;
   category: ScamCategory;
   patterns: RegExp[];
+  credentialContext?: boolean;
 };
 
 const rules: RuleDefinition[] = [
@@ -67,15 +69,17 @@ const rules: RuleDefinition[] = [
   },
   {
     id: "blik-request",
+    credentialContext: true,
     label: "Wzmianka o BLIK lub prośba o kod",
     description: "Kod BLIK może umożliwić natychmiastową wypłatę pieniędzy. Nie podawaj go w wiadomości ani podczas rozmowy.",
     points: 34,
     severity: "high",
     category: "blik_fraud",
-    patterns: [/\b(?:blik|kod blik|podaj kod|wyślij kod|wyslij kod|wygeneruj kod|prześlij kod|przeslij kod)\b/i]
+    patterns: [/\bblik\b/i, /\b(?:podaj|wyślij|wyslij|wygeneruj|prześlij|przeslij) kod(?:\s+(?:SMS|autoryzacyjny|weryfikacyjny))?(?![\p{L}\p{N}_]|\s+(?:pocztowy|rabatowy))\b/iu]
   },
   {
     id: "card-data-request",
+    credentialContext: true,
     label: "Prośba o dane karty",
     description: "Nie przekazuj pełnych danych karty, CVV/CVC ani daty ważności przez link otrzymany w wiadomości.",
     points: 25,
@@ -85,6 +89,7 @@ const rules: RuleDefinition[] = [
   },
   {
     id: "personal-data-request",
+    credentialContext: true,
     label: "Wzmianka o poufnych danych",
     description: "PESEL, numer dowodu, login, hasło i PIN to dane poufne. Nie przekazuj ich nadawcy.",
     points: 26,
@@ -94,6 +99,16 @@ const rules: RuleDefinition[] = [
       /\b(?:pesel|podaj pesel|numer dowodu|dowód osobisty|dowod osobisty|login|hasło|haslo|password|pin)\b/i,
       /\b(?:potwierdź dane|potwierdz dane|confirm your details|verify your identity|verify your account|dane logowania)\b/i
     ]
+  },
+  {
+    id: "direct-credential-request",
+    credentialContext: true,
+    label: "Bezpośrednia prośba o poufne dane",
+    description: "Polecenie przesłania hasła, PIN-u, danych karty lub kodu autoryzacji to silny sygnał ostrzegawczy. Nie przekazuj tych danych nadawcy.",
+    points: 65,
+    severity: "high",
+    category: "identity_theft",
+    patterns: [directCredentialRequest]
   },
   {
     id: "urgency-pressure",
@@ -450,8 +465,9 @@ export function analyzeMessage(messageType: MessageType, rawText: string): Analy
     };
   }
 
+  const credentialText = withoutProtectiveCredentialSpans(text);
   const indicators = rules.reduce<RiskIndicator[]>((matches, rule) => {
-    const matchedKeywords = findMatches(text, rule.patterns);
+    const matchedKeywords = findMatches(rule.credentialContext ? credentialText : text, rule.patterns);
 
     if (matchedKeywords.length > 0) {
       matches.push({

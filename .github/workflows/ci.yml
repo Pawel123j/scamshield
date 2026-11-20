@@ -2,16 +2,21 @@ name: CI
 
 on:
   push:
-    branches: ["**"]
+    branches: [main]
   pull_request:
 
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   build-and-test:
     name: Lint, typecheck, testy, build
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - name: Checkout repository
@@ -20,7 +25,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
@@ -39,10 +44,28 @@ jobs:
         run: npm run test:run
 
       - name: Audyt zależności
-        # Verify the versioned parser patch and fail on all other high/critical findings.
-        # na `high`, żeby nowy komunikat o podatności o niskiej wadze nie
-        # zapalał CI na czerwono na commicie, którego nikt nie dotykał.
+        # Verify the versioned parser patch and fail on all other low/moderate/high/critical findings.
         run: npm run security:check
 
       - name: Build project
         run: npm run build
+
+  docker-smoke:
+    name: Docker install and HTTP smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build image including the committed dependency patch
+        run: docker build --tag scamshield:ci .
+      - name: Start the documented local-development container
+        run: docker run --detach --name scamshield-ci --publish 127.0.0.1:18313:3000 scamshield:ci
+      - name: Wait for and verify the actual analyzer page
+        run: |
+          timeout 120 bash -c 'until curl --fail --silent http://127.0.0.1:18313/analyze > /tmp/scamshield.html; do sleep 2; done'
+          python -c "from pathlib import Path; assert 'Sprawdź wiadomość' in Path('/tmp/scamshield.html').read_text()"
+      - name: Container logs and cleanup
+        if: always()
+        run: |
+          docker logs scamshield-ci || true
+          docker rm --force scamshield-ci || true

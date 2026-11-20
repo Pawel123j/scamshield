@@ -4,8 +4,10 @@ ScamShield Senior is an educational assistant for checking suspicious SMS messag
 
 ## Run it locally
 
+Use Node.js 24, matching CI and Docker. Install the locked dependencies:
+
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
@@ -28,10 +30,12 @@ This screenshot is captured from the production build in Chromium at 390 × 844.
 npm run lint
 npm run typecheck
 npm run test:run
+npm run evaluate:rules
+npm run security:check
 npm run build
 ```
 
-The Vitest suite covers analysis, saved history normalization, and storage failures. Playwright also exercises analysis and history after a quota error, cache version cleanup, current online HTML, and the offline fallback.
+The Vitest suite covers analysis, saved history normalization, and storage failures. The [dated synthetic evaluation](docs/RULE_EVALUATION.md) includes a baseline, raw results and four remaining mismatches; its 26/30 expected bands are not a real-world accuracy claim. Playwright exercises the actual production build: quota-error retry, 75-result retention across navigation/reload, cache cleanup, current online HTML and the offline fallback. Chromium runs with its sandbox enabled.
 
 ```bash
 python -m venv .venv-e2e
@@ -40,6 +44,17 @@ python -m pip install -r e2e/requirements.txt
 python -m playwright install chromium
 PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/path/to/chromium python -m pytest -q e2e
 ```
+
+## Docker demo
+
+```bash
+docker build -t scamshield:local .
+docker run --rm -p 127.0.0.1:3000:3000 scamshield:local
+```
+
+This image runs the Next.js development server for a local demo. CI builds it with the committed dependency patch and checks the real `/analyze` response. It is not a production deployment configuration. Production-build browser tests run separately with `next start`.
+
+The temporary braces parser patch has a review deadline of **2026-12-16**, renewed after upstream and independent code review on 2026-11-16; the security gate fails closed after that date. See [the security record](SECURITY_PATCH.md).
 
 ## Limits
 
