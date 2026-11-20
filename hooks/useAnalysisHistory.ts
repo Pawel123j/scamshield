@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useSyncExternalStore } from "react";
 import type { AnalysisResult } from "@/lib/types";
-import { readAnalysisHistory, saveAnalysisHistory } from "@/lib/storage";
+import { ANALYSIS_HISTORY_LIMIT, readAnalysisHistory, saveAnalysisHistory } from "@/lib/storage";
 
 const initial = { history: [] as AnalysisResult[], saveError: false, hasLoaded: false };
 let snapshot = initial;
@@ -20,7 +20,7 @@ export function useAnalysisHistory() {
   }, []);
   return {
     ...state,
-    addAnalysis: (result: AnalysisResult) => save([result, ...snapshot.history].slice(0, 50)),
+    addAnalysis: (result: AnalysisResult) => save([result, ...snapshot.history].slice(0, ANALYSIS_HISTORY_LIMIT)),
     deleteAnalysis: (id: string) => save(snapshot.history.filter(item => item.id !== id)),
     clearHistory: () => save([]),
     retrySave: () => save(snapshot.history)

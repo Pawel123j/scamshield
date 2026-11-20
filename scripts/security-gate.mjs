@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 // A temporary, tested source patch, not an ignored vulnerability. Any change to
 // the advisory, installed code, version, or review deadline fails this gate.
 const patchedAdvisory = 'https://github.com/advisories/GHSA-vfj7-8cjw-p6xm';
-const reviewBefore = '2026-11-18';
+const reviewBefore = '2026-12-16';
 const patchedParserSha256 = '0d010535667c2889449adcc0cf596c2db2c61f73c513b96c4a2cf1fd8ad1e018';
 const require = createRequire(import.meta.url);
 const npmCli = process.env.npm_execpath;
@@ -33,31 +33,57 @@ function verifyPatchedBraces(node) {
     'src/app/**/*.ts', 'src/app/**/*.tsx', 'src/components/**/*.ts', 'src/components/**/*.tsx',
   ]);
   assert.deepEqual(braces.expand('v{1..3}'), ['v1', 'v2', 'v3']);
-  for (const [open, close] of [['{', '}'], ['(', ')'], ['{(', ')}']]) {
+  for (const [open, close] of [['{', '}'], ['(', ')'], ['{(', ')}'], ['{(', '})']]) {
     for (const depth of [129, 4000, 10000]) {
       for (const ending of [close.repeat(depth), '']) {
         const pattern = open.repeat(depth) + 'a,b' + ending;
         for (const method of ['parse', 'compile', 'expand', 'stringify']) {
-          assert.throws(() => braces[method](pattern), (error) => error instanceof SyntaxError && /nesting|max characters/.test(error.message));
+          const expected = pattern.length <= 10000 ? /nesting/ : /max characters/;
+          assert.throws(() => braces[method](pattern), (error) => error instanceof SyntaxError && expected.test(error.message));
         }
       }
     }
+  }
+  // Verify the exact compatibility boundary and every public string entry point.
+  for (const [open, close] of [['{', '}'], ['(', ')']]) {
+    for (const depth of [127, 128]) {
+      const pattern = open.repeat(depth) + 'a,b' + close.repeat(depth);
+      for (const method of ['parse', 'compile', 'expand', 'stringify']) {
+        assert.doesNotThrow(() => braces[method](pattern));
+      }
+    }
+    // 9999 characters stays below the separate length cap. The unpatched
+    // recursive expand/stringify APIs overflowed the stack on these patterns.
+    const belowLengthCap = open.repeat(4999) + 'x' + close.repeat(4999);
+    for (const method of ['parse', 'compile', 'expand', 'stringify']) {
+      assert.throws(() => braces[method](belowLengthCap), (error) => error instanceof SyntaxError && /nesting/.test(error.message));
+    }
+    const nested = open.repeat(129) + 'a,b' + close.repeat(129);
+    for (const run of [
+      () => braces(nested), () => braces.create(nested),
+      () => braces(nested, { expand: true }), () => braces([nested]),
+      () => braces(nested, { maxLength: Infinity }),
+    ]) assert.throws(run, (error) => error instanceof SyntaxError && /nesting/.test(error.message));
   }
   // Escaped delimiters, quoted text and many shallow groups remain valid.
   assert.ok(braces.compile('\\{literal\\}'));
   assert.ok(braces.compile('"' + '{'.repeat(1000) + '"'));
   assert.ok(braces.compile('{a,b}'.repeat(1000)));
+  assert.ok(braces.compile('[' + '{'.repeat(1000) + ']'));
   checked.add(node);
 }
+// The committed patch remains part of this installation even if an advisory
+// feed temporarily stops reporting braces. Verify it before claiming success.
+verifyPatchedBraces('node_modules/braces');
 const failures = [];
 for (const vulnerability of Object.values(report.vulnerabilities)) {
   for (const advisory of vulnerability.via) {
-    if (typeof advisory !== 'object' || !['high', 'critical'].includes(advisory.severity)) continue;
+    if (typeof advisory !== 'object' || !['low', 'moderate', 'high', 'critical'].includes(advisory.severity)) continue;
     if (advisory.url === patchedAdvisory && vulnerability.name === 'braces' && vulnerability.nodes.length) {
       for (const node of vulnerability.nodes) verifyPatchedBraces(node);
     } else failures.push(`${advisory.severity}: ${advisory.name}: ${advisory.url}`);
   }
 }
 if (failures.length) throw new Error('Unmitigated audit findings:\n' + [...new Set(failures)].join('\n'));
-console.log(`Security gate PASS: ${checked.size} braces installation(s) verified and attack regressions passed; no other high/critical advisories.`);
+console.log(`Security gate PASS: ${checked.size} braces installation(s) verified and attack regressions passed; no other low/moderate/high/critical advisories.`);
 console.log('Raw npm audit counts (include patched dependencies):', report.metadata?.vulnerabilities);

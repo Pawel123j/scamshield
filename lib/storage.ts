@@ -1,4 +1,5 @@
 export {
+  ANALYSIS_HISTORY_LIMIT,
   clearScamShieldStorage,
   getLocalStorageItem,
   readAnalysisHistory,
