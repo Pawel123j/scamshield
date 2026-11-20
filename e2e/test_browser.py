@@ -1,4 +1,5 @@
 import re
+import time
 from pathlib import Path
 
 from playwright.sync_api import expect
@@ -6,6 +7,19 @@ from playwright.sync_api import expect
 from browser_support import application, browser
 
 REPO = Path(__file__).resolve().parents[1]
+
+
+def wait_until(page, expression, timeout_s=15.0):
+    """Czeka na warunek przez page.evaluate (CDP), a nie wait_for_function.
+
+    wait_for_function kompiluje wyrażenie tekstowe przez eval w stronie, co aplikacja
+    słusznie blokuje polityką CSP bez 'unsafe-eval' (SCAM-02). Test nie wyłącza CSP.
+    """
+    deadline = time.monotonic() + timeout_s
+    while not page.evaluate(expression):
+        if time.monotonic() > deadline:
+            raise AssertionError(f"Timed out waiting for: {expression}")
+        page.wait_for_timeout(100)
 SERVER = ['node', 'node_modules/next/dist/bin/next', 'start', '--hostname', '127.0.0.1', '--port', '18312']
 URL = 'http://127.0.0.1:18312'
 
@@ -41,7 +55,7 @@ def test_pwa_removes_old_cache_uses_current_html_and_falls_back_offline():
         page = context.new_page()
         page.add_init_script("""(() => { const original = navigator.serviceWorker.register.bind(navigator.serviceWorker); navigator.serviceWorker.register = async (...args) => { const old = await caches.open('scamshield-senior-v1'); await old.put(location.origin + '/history', new Response('<h1>STALE VERSION A</h1>', {headers:{'Content-Type':'text/html'}})); return original(...args); }; })();""")
         page.goto(url)
-        page.wait_for_function('navigator.serviceWorker.controller !== null')
+        wait_until(page, 'navigator.serviceWorker.controller !== null')
         cache_names = page.evaluate('caches.keys()')
         assert len(cache_names) == 1
         assert re.fullmatch(r'scamshield-[0-9a-f]{16}', cache_names[0])
@@ -57,3 +71,23 @@ def test_pwa_removes_old_cache_uses_current_html_and_falls_back_offline():
         expect(page.get_by_role('heading', name='Brak połączenia', exact=True)).to_be_visible()
         context.set_offline(False)
         context.close()
+
+
+def test_security_headers_and_csp_are_served():
+    """SCAM-02: produkcyjny serwer wysyła CSP i nagłówki bezpieczeństwa."""
+    with application('scamshield', SERVER, REPO, URL) as url, browser() as b:
+        page = b.new_page()
+        response = page.goto(url + '/')
+        headers = response.headers
+        csp = headers['content-security-policy']
+        assert "frame-ancestors 'none'" in csp
+        assert "object-src 'none'" in csp
+        assert "'unsafe-eval'" not in csp
+        assert headers['x-frame-options'] == 'DENY'
+        assert headers['x-content-type-options'] == 'nosniff'
+        assert 'x-powered-by' not in headers
+        violations = []
+        page.on('console', lambda m: violations.append(m.text) if 'Content Security Policy' in m.text else None)
+        page.goto(url + '/analyze')
+        page.wait_for_load_state('networkidle')
+        assert violations == []
