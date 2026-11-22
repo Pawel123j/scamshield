@@ -23,7 +23,7 @@ export function LessonCard({ lesson, completed, onOpen }: LessonCardProps) {
       <button
         type="button"
         onClick={onOpen}
-        className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-2xl bg-ink px-5 py-3 font-bold text-white transition hover:bg-ocean focus:outline-none focus:ring-4 focus:ring-teal-200"
+        className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-2xl bg-ink px-5 py-3 font-bold text-white transition hover:bg-ocean focus:outline-hidden focus:ring-4 focus:ring-teal-200"
       >
         {completed ? "Powtórz lekcję" : "Rozpocznij lekcję"}
       </button>

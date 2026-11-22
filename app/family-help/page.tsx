@@ -55,7 +55,7 @@ export default function FamilyHelpPage() {
                 value={whatHappened}
                 onChange={(event) => setWhatHappened(event.target.value)}
                 placeholder="Np. SMS z banku, telefon od konsultanta, prośba o BLIK"
-                className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 px-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+                className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 px-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
               />
             </label>
 
@@ -66,7 +66,7 @@ export default function FamilyHelpPage() {
                 onChange={(event) => setDescription(event.target.value)}
                 rows={5}
                 placeholder="Opisz, kto napisał lub zadzwonił i o co prosił..."
-                className="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+                className="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
               />
             </label>
 
@@ -76,7 +76,7 @@ export default function FamilyHelpPage() {
                 <select
                   value={selectedContactId}
                   onChange={(event) => setSelectedContactId(event.target.value)}
-                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
                 >
                   <option value="">No saved contact selected</option>
                   {contacts.map((contact) => (
@@ -92,7 +92,7 @@ export default function FamilyHelpPage() {
                 <select
                   value={urgency}
                   onChange={(event) => setUrgency(event.target.value)}
-                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
                 >
                   <option>Nie wiem</option>
                   <option>Nadawca naciska bardzo mocno</option>
@@ -106,7 +106,7 @@ export default function FamilyHelpPage() {
                 <select
                   value={contactMethod}
                   onChange={(event) => setContactMethod(event.target.value)}
-                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
                 >
                   <option>Telefon</option>
                   <option>SMS</option>
@@ -124,7 +124,7 @@ export default function FamilyHelpPage() {
                 onChange={(event) => setSuspiciousText(event.target.value)}
                 rows={5}
                 placeholder="Wklej treść SMS-a, e-maila lub fragment rozmowy..."
-                className="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+                className="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
               />
             </label>
           </div>
@@ -151,7 +151,7 @@ export default function FamilyHelpPage() {
             <CopyButton text={generatedMessage} label="Copy family message" />
             <a
               href={`sms:?body=${encodeURIComponent(generatedMessage)}`}
-              className="inline-flex min-h-12 items-center gap-2 rounded-2xl border border-teal-100 bg-white px-5 py-3 font-bold text-tealguard transition hover:bg-teal-50 focus:outline-none focus:ring-4 focus:ring-teal-200"
+              className="inline-flex min-h-12 items-center gap-2 rounded-2xl border border-teal-100 bg-white px-5 py-3 font-bold text-tealguard transition hover:bg-teal-50 focus:outline-hidden focus:ring-4 focus:ring-teal-200"
             >
               <MessageCircle aria-hidden="true" size={20} />
               Open SMS

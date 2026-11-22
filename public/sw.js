@@ -1,6 +1,6 @@
 /* Generated during build; cache identity follows source and dependency changes. */
 const CACHE_PREFIX = "scamshield-";
-const CACHE_NAME = `${CACHE_PREFIX}b0457bdd1a693ea2`;
+const CACHE_NAME = `${CACHE_PREFIX}0280515787315dbb`;
 const MAX_ENTRIES = 80;
 const OFFLINE_URL = "/offline.html";
 self.addEventListener("install", event => {

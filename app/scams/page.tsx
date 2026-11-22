@@ -49,7 +49,7 @@ export default function ScamsPage() {
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search by title, category or example text"
-                className="min-h-12 w-full border-0 bg-transparent outline-none"
+                className="min-h-12 w-full border-0 bg-transparent outline-hidden"
               />
             </span>
           </label>
@@ -59,7 +59,7 @@ export default function ScamsPage() {
             <select
               value={category}
               onChange={(event) => setCategory(event.target.value)}
-              className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+              className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
             >
               {categories.map((item) => (
                 <option key={item} value={item}>
@@ -74,7 +74,7 @@ export default function ScamsPage() {
             <select
               value={risk}
               onChange={(event) => setRisk(event.target.value)}
-              className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+              className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
             >
               <option>All</option>
               <option value="low">Low</option>

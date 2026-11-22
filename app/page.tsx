@@ -61,21 +61,21 @@ export default function LandingPage() {
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/analyze"
-                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-white px-6 py-4 font-black text-ink shadow-soft transition hover:bg-cyan-50 focus:outline-none focus:ring-4 focus:ring-white/40"
+                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-white px-6 py-4 font-black text-ink shadow-soft transition hover:bg-cyan-50 focus:outline-hidden focus:ring-4 focus:ring-white/40"
               >
                 <SearchCheck aria-hidden="true" size={21} />
                 Analyze suspicious message
               </Link>
               <Link
                 href="/scams"
-                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-white/35 bg-white/10 px-6 py-4 font-black text-white transition hover:bg-white/18 focus:outline-none focus:ring-4 focus:ring-white/40"
+                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-white/35 bg-white/10 px-6 py-4 font-black text-white transition hover:bg-white/18 focus:outline-hidden focus:ring-4 focus:ring-white/40"
               >
                 <Database aria-hidden="true" size={21} />
                 Explore scam database
               </Link>
               <Link
                 href="/demo"
-                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-cyan-200 bg-cyan-200 px-6 py-4 font-black text-ink transition hover:bg-white focus:outline-none focus:ring-4 focus:ring-white/40"
+                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl border border-cyan-200 bg-cyan-200 px-6 py-4 font-black text-ink transition hover:bg-white focus:outline-hidden focus:ring-4 focus:ring-white/40"
               >
                 <PlayCircle aria-hidden="true" size={21} />
                 Start Interactive Demo
@@ -83,7 +83,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-white/20 bg-white/12 p-5 shadow-soft backdrop-blur">
+          <div className="rounded-4xl border border-white/20 bg-white/12 p-5 shadow-soft backdrop-blur-sm">
             <div className="rounded-3xl bg-white p-5 text-ink">
               <p className="text-sm font-black uppercase text-tealguard">Example analysis</p>
               <div className="mt-4 rounded-3xl bg-red-50 p-5">
@@ -163,7 +163,7 @@ export default function LandingPage() {
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             {scamTypes.map((type) => (
-              <div key={type} className="rounded-2xl border border-teal-100 bg-white p-4 font-bold text-ink shadow-sm">
+              <div key={type} className="rounded-2xl border border-teal-100 bg-white p-4 font-bold text-ink shadow-xs">
                 {type}
               </div>
             ))}
@@ -185,7 +185,7 @@ export default function LandingPage() {
             </p>
             <Link
               href="/privacy-security"
-              className="mt-7 inline-flex min-h-12 items-center gap-2 rounded-2xl bg-white px-5 py-3 font-bold text-ink transition hover:bg-cyan-50 focus:outline-none focus:ring-4 focus:ring-white/40"
+              className="mt-7 inline-flex min-h-12 items-center gap-2 rounded-2xl bg-white px-5 py-3 font-bold text-ink transition hover:bg-cyan-50 focus:outline-hidden focus:ring-4 focus:ring-white/40"
             >
               Read privacy details
               <ArrowRight aria-hidden="true" size={20} />
@@ -204,7 +204,7 @@ export default function LandingPage() {
             </p>
             <Link
               href="/analyze"
-              className="mt-6 inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-tealguard px-6 py-4 font-black text-white shadow-soft transition hover:bg-ocean focus:outline-none focus:ring-4 focus:ring-teal-200"
+              className="mt-6 inline-flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-tealguard px-6 py-4 font-black text-white shadow-soft transition hover:bg-ocean focus:outline-hidden focus:ring-4 focus:ring-teal-200"
             >
               Analyze suspicious message
               <ArrowRight aria-hidden="true" size={21} />

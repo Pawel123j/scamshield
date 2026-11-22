@@ -59,7 +59,7 @@ export function ScamCard({ scam }: ScamCardProps) {
         <CopyButton text={scam.exampleMessage} label="Copy example" variant="secondary" />
         <Link
           href={`/analyze?example=${encodeURIComponent(scam.exampleMessage)}&type=${encodeURIComponent("SMS")}`}
-          className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-tealguard px-5 py-3 font-bold text-white shadow-soft hover:bg-ocean focus:outline-none focus:ring-4 focus:ring-teal-200"
+          className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-tealguard px-5 py-3 font-bold text-white shadow-soft hover:bg-ocean focus:outline-hidden focus:ring-4 focus:ring-teal-200"
         >
           <SearchCheck aria-hidden="true" size={19} />
           Analyze example

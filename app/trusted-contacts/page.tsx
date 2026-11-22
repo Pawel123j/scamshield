@@ -61,7 +61,7 @@ export default function TrustedContactsPage() {
               <input
                 value={form.name}
                 onChange={(event) => setForm({ ...form, name: event.target.value })}
-                className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 px-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+                className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 px-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
               />
             </label>
             <label className="block">
@@ -70,7 +70,7 @@ export default function TrustedContactsPage() {
                 value={form.relation}
                 onChange={(event) => setForm({ ...form, relation: event.target.value })}
                 placeholder="Daughter, son, neighbor, caregiver"
-                className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 px-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+                className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 px-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
               />
             </label>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -79,7 +79,7 @@ export default function TrustedContactsPage() {
                 <input
                   value={form.phone}
                   onChange={(event) => setForm({ ...form, phone: event.target.value })}
-                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 px-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 px-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
                 />
               </label>
               <label className="block">
@@ -87,7 +87,7 @@ export default function TrustedContactsPage() {
                 <input
                   value={form.email}
                   onChange={(event) => setForm({ ...form, email: event.target.value })}
-                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 px-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 px-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
                 />
               </label>
             </div>
@@ -98,7 +98,7 @@ export default function TrustedContactsPage() {
                 onChange={(event) =>
                   setForm({ ...form, preferredContactMethod: event.target.value as TrustedContact["preferredContactMethod"] })
                 }
-                className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+                className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
               >
                 <option>Phone</option>
                 <option>SMS</option>
@@ -110,7 +110,7 @@ export default function TrustedContactsPage() {
             <button
               type="button"
               onClick={addContact}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-tealguard px-5 py-3 font-black text-white shadow-soft hover:bg-ocean focus:outline-none focus:ring-4 focus:ring-teal-200"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-tealguard px-5 py-3 font-black text-white shadow-soft hover:bg-ocean focus:outline-hidden focus:ring-4 focus:ring-teal-200"
             >
               <Plus aria-hidden="true" size={20} />
               Save contact locally
@@ -143,7 +143,7 @@ export default function TrustedContactsPage() {
                     <button
                       type="button"
                       onClick={() => deleteContact(contact.id)}
-                      className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-red-100 bg-white text-red-700 hover:bg-red-50 focus:outline-none focus:ring-4 focus:ring-red-100"
+                      className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-red-100 bg-white text-red-700 hover:bg-red-50 focus:outline-hidden focus:ring-4 focus:ring-red-100"
                       aria-label={`Delete ${contact.name}`}
                     >
                       <Trash2 aria-hidden="true" size={18} />

@@ -79,7 +79,7 @@ export default function AboutPage() {
         </p>
         <Link
           href="/analyze"
-          className="mt-6 inline-flex min-h-12 items-center justify-center rounded-2xl bg-tealguard px-5 py-3 font-bold text-white shadow-soft transition hover:bg-ocean focus:outline-none focus:ring-4 focus:ring-teal-200"
+          className="mt-6 inline-flex min-h-12 items-center justify-center rounded-2xl bg-tealguard px-5 py-3 font-bold text-white shadow-soft transition hover:bg-ocean focus:outline-hidden focus:ring-4 focus:ring-teal-200"
         >
           Try the analyzer
         </Link>

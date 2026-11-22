@@ -133,7 +133,7 @@ export default function LessonsPage() {
                 type="button"
                 onClick={submitQuiz}
                 disabled={Object.keys(answers).length < selectedLesson.quiz.length}
-                className="mt-6 inline-flex min-h-12 items-center justify-center rounded-2xl bg-tealguard px-6 py-3 font-black text-white shadow-soft transition hover:bg-ocean focus:outline-none focus:ring-4 focus:ring-teal-200 disabled:cursor-not-allowed disabled:bg-slate-300"
+                className="mt-6 inline-flex min-h-12 items-center justify-center rounded-2xl bg-tealguard px-6 py-3 font-black text-white shadow-soft transition hover:bg-ocean focus:outline-hidden focus:ring-4 focus:ring-teal-200 disabled:cursor-not-allowed disabled:bg-slate-300"
               >
                 Check answers
               </button>

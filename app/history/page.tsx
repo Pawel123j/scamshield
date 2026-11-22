@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { Eye, Filter, History, SearchCheck, Trash2 } from "lucide-react";
 import { AnalysisResult } from "@/components/AnalysisResult";
@@ -31,12 +31,6 @@ export default function HistoryPage() {
 
   const selected = filteredHistory.find((item) => item.id === selectedId) ?? filteredHistory[0] ?? null;
 
-  useEffect(() => {
-    if (filteredHistory[0] && !filteredHistory.some((item) => item.id === selectedId)) {
-      setSelectedId(filteredHistory[0].id);
-    }
-  }, [filteredHistory, selectedId]);
-
   return (
     <div className="space-y-8">
       {saveError && <p role="status" className="rounded-xl bg-amber-50 p-4">Nie zapisano historii. Zmiany pozostają w tej karcie. <button className="min-h-12 underline" onClick={retrySave}>Ponów zapis</button></p>}
@@ -53,7 +47,7 @@ export default function HistoryPage() {
             <button
               type="button"
               onClick={clearHistory}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-red-200 bg-red-50 px-5 py-3 font-bold text-red-800 transition hover:bg-red-100 focus:outline-none focus:ring-4 focus:ring-red-100"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-red-200 bg-red-50 px-5 py-3 font-bold text-red-800 transition hover:bg-red-100 focus:outline-hidden focus:ring-4 focus:ring-red-100"
             >
               <Trash2 aria-hidden="true" size={20} />
               Usuń całą historię
@@ -70,7 +64,7 @@ export default function HistoryPage() {
           action={
             <Link
               href="/analyze"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-tealguard px-5 py-3 font-bold text-white focus:outline-none focus:ring-4 focus:ring-teal-200"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-tealguard px-5 py-3 font-bold text-white focus:outline-hidden focus:ring-4 focus:ring-teal-200"
             >
               <SearchCheck aria-hidden="true" size={20} />
               Sprawdź wiadomość
@@ -90,7 +84,7 @@ export default function HistoryPage() {
                   key={item.value}
                   type="button"
                   onClick={() => setFilter(item.value)}
-                  className={`min-h-10 rounded-full px-4 py-2 text-sm font-bold transition focus:outline-none focus:ring-4 focus:ring-teal-200 ${
+                  className={`min-h-10 rounded-full px-4 py-2 text-sm font-bold transition focus:outline-hidden focus:ring-4 focus:ring-teal-200 ${
                     filter === item.value ? "bg-tealguard text-white" : "border border-teal-100 bg-white text-tealguard hover:bg-teal-50"
                   }`}
                 >
@@ -129,7 +123,7 @@ export default function HistoryPage() {
                           <button
                             type="button"
                             onClick={() => setSelectedId(item.id)}
-                            className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-teal-100 bg-white px-4 py-2 font-bold text-tealguard transition hover:bg-teal-50 focus:outline-none focus:ring-4 focus:ring-teal-200"
+                            className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-teal-100 bg-white px-4 py-2 font-bold text-tealguard transition hover:bg-teal-50 focus:outline-hidden focus:ring-4 focus:ring-teal-200"
                           >
                             <Eye aria-hidden="true" size={18} />
                             Szczegóły
@@ -139,7 +133,7 @@ export default function HistoryPage() {
                           <button
                             type="button"
                             onClick={() => deleteAnalysis(item.id)}
-                            className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-red-100 bg-white text-red-700 transition hover:bg-red-50 focus:outline-none focus:ring-4 focus:ring-red-100"
+                            className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-red-100 bg-white text-red-700 transition hover:bg-red-50 focus:outline-hidden focus:ring-4 focus:ring-red-100"
                             aria-label="Delete analysis"
                           >
                             <Trash2 aria-hidden="true" size={18} />

@@ -70,7 +70,7 @@ export default function PrivacySecurityPage() {
         </ul>
         <Link
           href="/history"
-          className="mt-6 inline-flex min-h-12 items-center justify-center rounded-2xl border border-teal-100 px-5 py-3 font-bold text-tealguard transition hover:bg-teal-50 focus:outline-none focus:ring-4 focus:ring-teal-200"
+          className="mt-6 inline-flex min-h-12 items-center justify-center rounded-2xl border border-teal-100 px-5 py-3 font-bold text-tealguard transition hover:bg-teal-50 focus:outline-hidden focus:ring-4 focus:ring-teal-200"
         >
           Manage analysis history
         </Link>

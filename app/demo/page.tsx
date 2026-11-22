@@ -55,7 +55,7 @@ export default function DemoPage() {
         </p>
         <Link
           href={demoSteps[0].href}
-          className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-2xl bg-white px-5 py-3 font-black text-ink hover:bg-cyan-50 focus:outline-none focus:ring-4 focus:ring-white/40"
+          className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-2xl bg-white px-5 py-3 font-black text-ink hover:bg-cyan-50 focus:outline-hidden focus:ring-4 focus:ring-white/40"
         >
           <PlayCircle aria-hidden="true" size={21} />
           Load demo message
@@ -70,7 +70,7 @@ export default function DemoPage() {
             <Link
               key={step.title}
               href={step.href}
-              className="rounded-3xl border border-teal-100 bg-white p-6 shadow-soft transition hover:-translate-y-1 hover:border-teal-300 focus:outline-none focus:ring-4 focus:ring-teal-200"
+              className="rounded-3xl border border-teal-100 bg-white p-6 shadow-soft transition hover:-translate-y-1 hover:border-teal-300 focus:outline-hidden focus:ring-4 focus:ring-teal-200"
             >
               <div className="flex items-start justify-between gap-4">
                 <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-50 text-tealguard">

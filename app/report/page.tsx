@@ -144,7 +144,7 @@ export default function ReportPage() {
                 <select
                   value={incidentType}
                   onChange={(event) => setIncidentType(event.target.value)}
-                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
                 >
                   <option>Suspicious message</option>
                   <option>Clicked suspicious link</option>
@@ -160,7 +160,7 @@ export default function ReportPage() {
                   type="date"
                   value={date}
                   onChange={(event) => setDate(event.target.value)}
-                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 px-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+                  className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 px-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
                 />
               </label>
             </div>
@@ -171,7 +171,7 @@ export default function ReportPage() {
                 value={whatHappened}
                 onChange={(event) => setWhatHappened(event.target.value)}
                 rows={4}
-                className="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+                className="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
               />
             </label>
 
@@ -182,7 +182,7 @@ export default function ReportPage() {
                 onChange={(event) => setDataShared(event.target.value)}
                 rows={3}
                 placeholder="Np. kod BLIK, dane karty, login, telefon, brak danych"
-                className="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+                className="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
               />
             </label>
 
@@ -191,7 +191,7 @@ export default function ReportPage() {
               <input
                 value={contact}
                 onChange={(event) => setContact(event.target.value)}
-                className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 px-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+                className="mt-2 min-h-12 w-full rounded-2xl border border-slate-200 px-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
               />
             </label>
 
@@ -202,7 +202,7 @@ export default function ReportPage() {
                 onChange={(event) => setActionsTaken(event.target.value)}
                 rows={3}
                 placeholder="Np. nie kliknięto linku, zablokowano kartę, kontakt z bankiem"
-                className="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-4 focus:border-tealguard focus:outline-none focus:ring-4 focus:ring-teal-200"
+                className="mt-2 w-full rounded-3xl border border-slate-200 px-4 py-4 focus:border-tealguard focus:outline-hidden focus:ring-4 focus:ring-teal-200"
               />
             </label>
           </div>

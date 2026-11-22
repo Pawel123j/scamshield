@@ -58,7 +58,7 @@ export function AppLayout({ children }: AppLayoutProps) {
               <button
                 type="button"
                 onClick={() => setMenuOpen(false)}
-                className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-ink shadow-sm focus:outline-none focus:ring-4 focus:ring-teal-200"
+                className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-ink shadow-xs focus:outline-hidden focus:ring-4 focus:ring-teal-200"
                 aria-label="Zamknij menu"
               >
                 <X aria-hidden="true" size={24} />

@@ -29,7 +29,7 @@ export default function ChecklistPage() {
           <button
             type="button"
             onClick={() => setCheckedItems({})}
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3 font-bold text-ink transition hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-teal-200"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3 font-bold text-ink transition hover:bg-slate-50 focus:outline-hidden focus:ring-4 focus:ring-teal-200"
           >
             <RotateCcw aria-hidden="true" size={20} />
             Reset checklist
