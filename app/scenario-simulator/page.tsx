@@ -78,7 +78,7 @@ export default function ScenarioSimulatorPage() {
                 type="button"
                 onClick={() => chooseAnswer(option.value)}
                 className={cn(
-                  "min-h-14 rounded-2xl border px-5 py-3 font-black transition focus:outline-none focus:ring-4 focus:ring-teal-200",
+                  "min-h-14 rounded-2xl border px-5 py-3 font-black transition focus:outline-hidden focus:ring-4 focus:ring-teal-200",
                   selected === option.value ? "border-tealguard bg-tealguard text-white" : "border-teal-100 bg-white text-ink hover:bg-teal-50"
                 )}
               >
@@ -96,7 +96,7 @@ export default function ScenarioSimulatorPage() {
               <button
                 type="button"
                 onClick={nextScenario}
-                className="mt-4 inline-flex min-h-12 items-center rounded-2xl bg-ink px-5 py-3 font-bold text-white hover:bg-ocean focus:outline-none focus:ring-4 focus:ring-teal-200"
+                className="mt-4 inline-flex min-h-12 items-center rounded-2xl bg-ink px-5 py-3 font-bold text-white hover:bg-ocean focus:outline-hidden focus:ring-4 focus:ring-teal-200"
               >
                 Next scenario
               </button>
@@ -120,7 +120,7 @@ export default function ScenarioSimulatorPage() {
           <button
             type="button"
             onClick={resetScore}
-            className="mt-5 inline-flex min-h-12 items-center gap-2 rounded-2xl border border-slate-200 px-5 py-3 font-bold text-ink hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-teal-200"
+            className="mt-5 inline-flex min-h-12 items-center gap-2 rounded-2xl border border-slate-200 px-5 py-3 font-bold text-ink hover:bg-slate-50 focus:outline-hidden focus:ring-4 focus:ring-teal-200"
           >
             <RotateCcw aria-hidden="true" size={19} />
             Reset score

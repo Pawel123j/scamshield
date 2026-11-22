@@ -110,7 +110,7 @@ export default function DashboardPage() {
           </div>
           <Link
             href="/analyze"
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-tealguard px-5 py-3 font-bold text-white shadow-soft transition hover:bg-ocean focus:outline-none focus:ring-4 focus:ring-teal-200"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-tealguard px-5 py-3 font-bold text-white shadow-soft transition hover:bg-ocean focus:outline-hidden focus:ring-4 focus:ring-teal-200"
           >
             <SearchCheck aria-hidden="true" size={21} />
             Analyze now
@@ -159,7 +159,7 @@ export default function DashboardPage() {
             <Link
               key={action.href}
               href={action.href}
-              className="focus-card rounded-3xl border border-teal-100 bg-white p-6 shadow-soft transition hover:-translate-y-1 hover:border-teal-300 focus:outline-none focus:ring-4 focus:ring-teal-200"
+              className="focus-card rounded-3xl border border-teal-100 bg-white p-6 shadow-soft transition hover:-translate-y-1 hover:border-teal-300 focus:outline-hidden focus:ring-4 focus:ring-teal-200"
             >
               <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-50 text-tealguard">
                 <Icon aria-hidden="true" size={24} />
@@ -179,7 +179,7 @@ export default function DashboardPage() {
           </div>
           <Link
             href="/history"
-            className="inline-flex min-h-11 items-center rounded-2xl border border-teal-100 px-4 py-2 font-bold text-tealguard hover:bg-teal-50 focus:outline-none focus:ring-4 focus:ring-teal-200"
+            className="inline-flex min-h-11 items-center rounded-2xl border border-teal-100 px-4 py-2 font-bold text-tealguard hover:bg-teal-50 focus:outline-hidden focus:ring-4 focus:ring-teal-200"
           >
             View all
           </Link>
@@ -194,7 +194,7 @@ export default function DashboardPage() {
               action={
                 <Link
                   href="/analyze"
-                  className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-tealguard px-5 py-3 font-bold text-white focus:outline-none focus:ring-4 focus:ring-teal-200"
+                  className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-tealguard px-5 py-3 font-bold text-white focus:outline-hidden focus:ring-4 focus:ring-teal-200"
                 >
                   Analyze a message
                 </Link>

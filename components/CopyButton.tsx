@@ -33,7 +33,7 @@ export function CopyButton({ text, label = "Kopiuj", copiedLabel = "Skopiowano!"
       onClick={handleCopy}
       disabled={!text}
       className={cn(
-        "inline-flex min-h-12 items-center gap-2 rounded-2xl px-5 py-3 font-bold shadow-soft transition focus:outline-none focus:ring-4 focus:ring-teal-200 disabled:cursor-not-allowed disabled:bg-slate-300",
+        "inline-flex min-h-12 items-center gap-2 rounded-2xl px-5 py-3 font-bold shadow-soft transition focus:outline-hidden focus:ring-4 focus:ring-teal-200 disabled:cursor-not-allowed disabled:bg-slate-300",
         variant === "primary"
           ? "bg-tealguard text-white hover:bg-ocean"
           : "border border-teal-100 bg-white text-tealguard hover:bg-teal-50"

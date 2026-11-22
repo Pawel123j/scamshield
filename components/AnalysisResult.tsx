@@ -58,7 +58,7 @@ export function AnalysisResult({ result }: AnalysisResultProps) {
               <article key={indicator.id} className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <h3 className="font-bold text-ink">{indicator.label}</h3>
-                  <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-ink shadow-sm">
+                  <span className="rounded-full bg-white px-3 py-1 text-xs font-black text-ink shadow-xs">
                     +{indicator.points}
                   </span>
                 </div>

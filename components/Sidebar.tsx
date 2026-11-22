@@ -56,10 +56,10 @@ export function Sidebar({ onNavigate, mobile = false }: SidebarProps) {
             href={item.href}
             onClick={onNavigate}
             className={cn(
-              "flex min-h-12 items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition focus:outline-none focus:ring-4 focus:ring-teal-200",
+              "flex min-h-12 items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition focus:outline-hidden focus:ring-4 focus:ring-teal-200",
               active
                 ? "bg-tealguard text-white shadow-soft"
-                : "text-slate-700 hover:bg-white hover:text-ink hover:shadow-sm"
+                : "text-slate-700 hover:bg-white hover:text-ink hover:shadow-xs"
             )}
           >
             <Icon aria-hidden="true" size={20} />

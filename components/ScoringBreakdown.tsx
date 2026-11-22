@@ -16,7 +16,7 @@ export function ScoringBreakdown({ items }: ScoringBreakdownProps) {
         {items.map((item, index) => (
           <div key={`${item.label}-${index}`} className="flex items-center justify-between gap-4 rounded-2xl bg-slate-50 p-4">
             <span className="font-semibold text-slate-700">{item.label}</span>
-            <span className="rounded-full bg-white px-3 py-1 text-sm font-black text-ink shadow-sm">
+            <span className="rounded-full bg-white px-3 py-1 text-sm font-black text-ink shadow-xs">
               +{item.points}
             </span>
           </div>

@@ -25,6 +25,9 @@ export default function AnalyzePage() {
     const example = params.get("example");
     const type = params.get("type") as MessageType | null;
     if (example) {
+      // The page is statically exported, so query parameters are only known
+      // after mount; reading them during render would break hydration.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setMessageType(type && messageTypes.includes(type) ? type : "SMS");
       setText(example.slice(0, MAX_ANALYSIS_INPUT_LENGTH));
     }
@@ -78,7 +81,7 @@ export default function AnalyzePage() {
           </details>
           <Link href="/privacy-security" className="mt-3 inline-flex min-h-12 items-center font-bold text-tealguard underline">Jak chronimy prywatność</Link>
         </section>
-        <div ref={resultRef} tabIndex={-1} aria-label="Wynik analizy" className="scroll-mt-24 rounded-3xl focus:outline-none focus:ring-4 focus:ring-teal-200">
+        <div ref={resultRef} tabIndex={-1} aria-label="Wynik analizy" className="scroll-mt-24 rounded-3xl focus:outline-hidden focus:ring-4 focus:ring-teal-200">
           {result ? <AnalysisResult result={result} /> : <section className="rounded-3xl border border-dashed border-teal-200 bg-white p-6"><h2 className="text-xl font-black">Tutaj pojawi się wynik</h2><p className="mt-3 text-slate-600">Zobaczysz wykryte sygnały, punktację i wskazówki. Narzędzie może się mylić; niski wynik nie jest gwarancją bezpieczeństwa.</p></section>}
         </div>
       </div>

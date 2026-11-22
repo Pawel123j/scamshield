@@ -48,7 +48,7 @@ export function PDFExportButton({ result }: PDFExportButtonProps) {
       type="button"
       onClick={handleExport}
       disabled={status === "saving"}
-      className="inline-flex min-h-12 items-center gap-2 rounded-2xl border border-teal-100 bg-white px-5 py-3 font-bold text-tealguard shadow-soft transition hover:bg-teal-50 focus:outline-none focus:ring-4 focus:ring-teal-200"
+      className="inline-flex min-h-12 items-center gap-2 rounded-2xl border border-teal-100 bg-white px-5 py-3 font-bold text-tealguard shadow-soft transition hover:bg-teal-50 focus:outline-hidden focus:ring-4 focus:ring-teal-200"
     >
       <FileText aria-hidden="true" size={20} />
       {status === "saving" ? "Generowanie…" : status === "error" ? "PDF niedostępny — ponów" : "Pobierz raport PDF"}
